@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+#
+# Generate colorscheme with wal and set wallpaper
+#
+# Usage: luv, luv [image directory path], luv [image file path]
+
+arg=${1:-"$HOME/pictures/wallpapers"}
+
+wal -i "$arg"
