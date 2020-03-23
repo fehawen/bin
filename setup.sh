@@ -7,7 +7,5 @@ dest=~/.local/bin
 
 for file in "$src"/*
 do
-    if [ -f "$file" ]; then
-        ln -sfv "$PWD/$file" "$dest/${file##$src/}"
-    fi
+    [ -f "$file" ] && ln -sfv "$PWD/$file" "$dest/${file##$src/}"
 done
