@@ -1,15 +1,43 @@
-#!/bin/sh
+#!/usr/bin/env bash
 #
 # Read logs from #kisslinux irc channel with colorized output.
-#
-# Usage: irc, irc [YYYYMMDD]
 
-curl "https://freenode.logbot.info/kisslinux/${1:-$(date +%Y%m%d)}/raw" |
+prin() {
+    printf '\033[3%s;1m%10s\033[m %s\n' "$1" "$2" "$3"
+}
 
-while read -r _ n m; do
-    n=${n%>}
-    n=${n#<}
+fetch() {
+    nick="${n:-""}"
+    date="${d:-$(date +%Y%m%d)}"
 
-    printf '\033[3%s;1m%10s\033[m %s\n' \
-        "$((${#n} % 6 + 1))" "$n" "$m"
-done
+    while read -r _ u m; do
+        u=${u%>}
+        u=${u#<}
+
+        c="$((${#u} % 6 + 1))"
+
+        case $nick in
+            '') prin "$c" "$u" "$m" ;;
+            *) [[ "$m" =~ $n ]] && prin "$c" "$u" "$m" ;;
+        esac
+    done <<< "$(curl "https://freenode.logbot.info/kisslinux/$date/raw")"
+}
+
+args() {
+    while getopts :n:d:v opt; do case $opt in
+        \?)
+            printf 'irc <args>\n\n'
+            printf -- '-n <nickname>\n'
+            printf -- '-d <yyyymmdd>\n'
+            printf -- '-h (help)\n'
+            printf -- '-v (version)\n'
+        ;;
+
+        v) printf 'irc 0.1.1\n' ;;
+        :) printf 'Option -%s requires an argument\n' "$OPTARG" >&2 ;;
+        *) declare -g "$opt=$OPTARG" ;;
+    esac; [[ $opt =~ \?|v|: ]] && exit; done
+}
+
+args "$@"
+fetch
