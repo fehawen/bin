@@ -3,7 +3,7 @@
 # Read logs from #kisslinux irc channel with colorized output.
 
 prin() {
-    printf '\033[3%s;1m%10s\033[m %s\n' "$1" "$2" "$3"
+    printf '\033[3%s;1m%10s\033[m %s\n' "$1" "${2:0:10}" "$3"
 }
 
 fetch() {
