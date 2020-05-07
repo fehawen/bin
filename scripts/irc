@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 #
 # Read logs from #kisslinux irc channel with colorized output.
+#
+# Syntax right off the bat from birch:
+# https://github.com/dylanaraps/birch/blob/master/birch
 
 prin() {
     printf '\033[3%s;1m%10s\033[m %s\n' "$1" "${2:0:10}" "$3"
@@ -33,7 +36,7 @@ args() {
             printf -- '-v (version)\n'
         ;;
 
-        v) printf 'irc 0.1.1\n' ;;
+        v) printf 'irc 0.0.1\n' ;;
         :) printf 'Option -%s requires an argument\n' "$OPTARG" >&2 ;;
         *) declare -g "$opt=$OPTARG" ;;
     esac; [[ $opt =~ \?|v|: ]] && exit; done
