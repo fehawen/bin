@@ -20,7 +20,7 @@ fetch() {
             '') prin "$c" "$u" "$m" ;;
             *) [[ "$m" =~ $n ]] && prin "$c" "$u" "$m" ;;
         esac
-    done <<< "$(curl "https://freenode.logbot.info/kisslinux/$date/raw")"
+    done <<< "$(curl -s "https://freenode.logbot.info/kisslinux/$date/raw")"
 }
 
 args() {
