@@ -10,7 +10,7 @@ prin() {
 }
 
 fetch() {
-    nick="${n:-""}"
+    search="${s:-""}"
     date="${d:-$(date +%Y%m%d)}"
 
     while read -r _ u m; do
@@ -19,18 +19,18 @@ fetch() {
 
         c="$((${#u} % 6 + 1))"
 
-        case $nick in
+        case $search in
             '') prin "$c" "$u" "$m" ;;
-            *) [[ "$m" =~ $n ]] && prin "$c" "$u" "$m" ;;
+            *) [[ "$m" == *$s* ]] && prin "$c" "$u" "$m" ;;
         esac
     done <<< "$(curl -s "https://freenode.logbot.info/kisslinux/$date/raw")"
 }
 
 args() {
-    while getopts :n:d:v opt; do case $opt in
+    while getopts :s:d:v opt; do case $opt in
         \?)
             printf 'irc <args>\n\n'
-            printf -- '-n <nickname>\n'
+            printf -- '-s <search messages for word or nick mention>\n'
             printf -- '-d <yyyymmdd>\n'
             printf -- '-h (help)\n'
             printf -- '-v (version)\n'
