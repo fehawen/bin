@@ -4,6 +4,11 @@
 #
 # Usage: vol, vol [5-100]
 
+command -v pamixer >/dev/null || {
+    printf 'err: %s\n' "command 'pamixer' not found."
+    exit 1
+}
+
 if [ -z "$1" ]; then
   pamixer --get-volume-human
 elif [ "$1" -gt 100 ]; then

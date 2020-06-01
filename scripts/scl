@@ -2,6 +2,11 @@
 #
 # Change scaling (resolution) for external monitor(s).
 
+command -v xrandr >/dev/null || {
+    printf 'err: %s\n' "command 'xrandr' not found."
+    exit 1
+}
+
 external_output="$(xrandr | grep -w "connected" | awk '{if(NR>1)print $1}')"
 
 if [[ -z "$external_output" ]]; then

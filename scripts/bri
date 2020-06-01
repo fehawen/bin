@@ -4,6 +4,11 @@
 #
 # Usage: bri, bri [5-100]
 
+command -v xbacklight >/dev/null || {
+    printf 'err: %s\n' "command 'xbacklight' not found."
+    exit 1
+}
+
 if [ -z "$1" ]; then
   xbacklight -get
 elif [ "$1" -gt 100 ]; then

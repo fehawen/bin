@@ -4,6 +4,11 @@
 #
 # Usage: mon, mon [auto]
 
+command -v xrandr >/dev/null || {
+    printf 'err: %s\n' "command 'xrandr' not found."
+    exit 1
+}
+
 [ "$1" = "auto" ] && xrandr --auto
 
 internal_output="$(xrandr | grep "primary" | awk '{print $1}')"
@@ -11,14 +16,14 @@ external_output_1="$(xrandr | grep -w "connected" | awk '{if(NR>1)print $1}' | h
 external_output_2="$(xrandr | grep -w "connected" | awk '{if(NR>2)print $1}')"
 
 if [ -n "$external_output_1" ] && [ -n "$external_output_2" ]; then
-  xrandr \
-    --output "$internal_output" --off \
-    --output "$external_output_1" --auto \
-    --output "$external_output_2" --auto --right-of "$external_output_1"
+    xrandr \
+        --output "$internal_output" --off \
+        --output "$external_output_1" --auto \
+        --output "$external_output_2" --auto --right-of "$external_output_1"
 elif [ -n "$external_output_1" ] && [ -z "$external_output_2" ]; then
-  xrandr \
-    --output "$internal_output" --off \
-    --output "$external_output_1" --auto
+    xrandr \
+        --output "$internal_output" --off \
+        --output "$external_output_1" --auto
 else
   xrandr --auto
 fi

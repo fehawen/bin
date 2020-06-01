@@ -1,5 +1,10 @@
 #!/bin/sh
 
+command -v nc >/dev/null || {
+    printf 'err: %s\n' "command 'nc' (netcat) not found."
+    exit 1
+}
+
 [ -f "$1" ] || exit 1
 
 nc termbin.com 9999 < "$1"
