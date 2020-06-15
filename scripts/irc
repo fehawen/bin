@@ -6,22 +6,29 @@
 # https://github.com/dylanaraps/birch/blob/master/birch
 
 prin() {
-    printf '\033[3%s;1m%10s\033[m %s\n' "$1" "${2:0:10}" "$3"
+    printf '\033[3%s;1m%10s\033[m \033[90;1m%s\033[m %s\n' "$1" "${2:0:10}" "$3" "$4"
 }
 
 fetch() {
     search="${s:-""}"
     date="${d:-$(date +%Y%m%d)}"
+    # shellcheck disable=SC2034
+    read -r scrsize < <(stty size)
 
-    while read -r _ u m; do
+    while read -r t u m; do
         u=${u%>}
         u=${u#<}
+        t="${t%:*}"
 
         c="$((${#u} % 6 + 1))"
 
+        o="$(printf %s "$m" | \
+            fold -s -w $((${scrsize##* } - 17)) | \
+            sed -e '2,$s|^|                 |g')"
+
         case $search in
-            '') prin "$c" "$u" "$m" ;;
-            *) [[ "$m" == *$s* ]] && prin "$c" "$u" "$m" ;;
+            '') prin "$c" "$u" "$t" "$o" ;;
+            *) [[ "$m" == *$s* ]] && prin "$c" "$u" "$t" "$o" ;;
         esac
     done <<< "$(curl -s "https://freenode.logbot.info/kisslinux/$date/raw")"
 }
