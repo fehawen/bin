@@ -2,18 +2,15 @@
 #
 # Read logs from #kisslinux irc channel with colorized output.
 #
-# Syntax right off the bat from birch:
-# https://github.com/dylanaraps/birch/blob/master/birch
+# Usage: irc, irc -d [yyyymmdd], irc -s [search string]
 
 prin() {
-    printf '\033[3%s;1m%10s\033[m \033[90;1m%s\033[m %s\n' "$1" "${2:0:10}" "$3" "$4"
+    printf '%s \033[3%s;1m%10s\033[m %s\n' "$1" "$2" "${3:0:10}" "$4"
 }
 
 fetch() {
     search="${s:-""}"
     date="${d:-$(date +%Y%m%d)}"
-    # shellcheck disable=SC2034
-    read -r scrsize < <(stty size)
 
     while read -r t u m; do
         u=${u%>}
@@ -27,27 +24,32 @@ fetch() {
             sed -e '2,$s|^|                 |g')"
 
         case $search in
-            '') prin "$c" "$u" "$t" "$o" ;;
-            *) [[ "$m" == *$s* ]] && prin "$c" "$u" "$t" "$o" ;;
+            '') prin "$t" "$c" "$u" "$o" ;;
+            *) [[ "$m" == *$s* ]] && prin "$t" "$c" "$u" "$o" ;;
         esac
     done <<< "$(curl -s "https://freenode.logbot.info/kisslinux/$date/raw")"
 }
 
 args() {
-    while getopts :s:d:v opt; do case $opt in
+    while getopts :s:d: opt; do case $opt in
         \?)
             printf 'irc <args>\n\n'
             printf -- '-s <search messages for word or nick mention>\n'
             printf -- '-d <yyyymmdd>\n'
             printf -- '-h (help)\n'
-            printf -- '-v (version)\n'
         ;;
 
-        v) printf 'irc 0.0.1\n' ;;
         :) printf 'Option -%s requires an argument\n' "$OPTARG" >&2 ;;
         *) declare -g "$opt=$OPTARG" ;;
-    esac; [[ $opt =~ \?|v|: ]] && exit; done
+    esac; [[ $opt =~ \?|: ]] && exit; done
 }
 
-args "$@"
-fetch
+main() {
+    # shellcheck disable=SC2034
+    read -r scrsize < <(stty size)
+
+    args "$@"
+    fetch
+}
+
+main "$@"
