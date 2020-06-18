@@ -1,8 +1,8 @@
 #!/bin/sh
 
-[ -f "$HOME/.cache/wal/colors.sh" ] && {
+[ -f "$HOME/.cache/pal/colors" ] && {
     # shellcheck disable=SC1090
-    . "$HOME/.cache/wal/colors.sh"
+    . "$HOME/.cache/pal/colors"
 
     # shellcheck disable=SC2154
     dmenu_run -i -p "launch:" \
