@@ -24,8 +24,14 @@ fetch() {
             sed -e '2,$s|^|                 |g')"
 
         case $search in
-            '') prin "$t" "$c" "$u" "$o" ;;
-            *) [[ "$m" == *$s* ]] && prin "$t" "$c" "$u" "$o" ;;
+            '')
+                prin "$t" "$c" "$u" "$o"
+            ;;
+            *)
+                if [[ "$m" =~ $search ]] || [[ "$u" =~ $search ]]; then
+                    prin "$t" "$c" "$u" "$o"
+                fi
+            ;;
         esac
     done <<< "$(curl -s "https://freenode.logbot.info/kisslinux/$date/raw")"
 }
