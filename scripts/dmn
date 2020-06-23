@@ -6,10 +6,10 @@
 
     # shellcheck disable=SC2154
     dmenu_run -i -p "launch:" \
-        -nb "$color0" \
+        -nb "$color8" \
         -nf "$color15" \
-        -sb "$color1" \
-        -sf "$color15" \
+        -sb "$color8" \
+        -sf "$color0" \
         -fn "RobotoMono-28"
 }
 
