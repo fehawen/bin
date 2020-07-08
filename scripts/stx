@@ -1,0 +1,32 @@
+#!/bin/sh
+
+#xinit -- /usr/bin/X -ardelay 500 -arinterval 30 -nolisten tcp :0 vt1 -quiet
+
+xinitrc() {
+    export DISPLAY=:0
+
+    [ -f ~/.Xresources ] && xrdb -merge ~/.Xresources &
+
+    # shellcheck disable=SC1090
+    [ -f ~/.cache/cpr/colors ] && . ~/.cache/cpr/colors &
+
+    xsetroot -solid "${color8:=#999999}" &
+
+    setxkbmap -layout se &
+
+    exec sowm
+}
+
+trap xinitrc USR1
+
+(
+    trap '' USR1
+
+    exec X -ardelay 400 \
+        -arinterval 30 \
+        -nolisten tcp \
+        -keeptty \
+        :0 vt1 -quiet
+) &
+
+wait
