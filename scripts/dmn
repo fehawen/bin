@@ -1,12 +1,8 @@
 #!/bin/sh
 
-# shellcheck disable=SC1090
-[ -f ~/.cache/cpr/colors ] && . ~/.cache/cpr/colors
-
-# shellcheck disable=SC2154
-dmenu_run -i -p "launch:" \
-    -nb "${color8:=#999999}" \
-    -nf "${color15:=#FFFFFF}" \
-    -sb "${color8:=#999999}" \
-    -sf "${color0:=#000000}" \
+dmenu_run -i \
+    -nb "#999999" \
+    -nf "#000000" \
+    -sb "#999999" \
+    -sf "#FFFFFF" \
     -fn "JetBrainsMono-28"
