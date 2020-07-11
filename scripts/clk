@@ -1,0 +1,12 @@
+#!/bin/sh
+
+# clk
+# Send date and time sent to nfy for notification.
+# Preferably triggered with a hotkey.
+
+command -v nfy >/dev/null || exit 1
+
+# Format: day date month hh:mm
+# Example: Monday 12 April 20:43
+
+nfy "$(date +"%A %d %B %H:%M")"

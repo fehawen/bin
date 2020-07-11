@@ -15,4 +15,3 @@ import -window root "$f"
 command -v nfy >/dev/null && {
     nfy "Screenshot \"$d-$t.png\" taken."
 }
-
