@@ -3,10 +3,17 @@
 # Author: https://github.com/dylanaraps
 #
 # Get battery capacity and status.
+# Option to send it to 'nfy' for notification
+# with 'bat notify'
 
 bat_dir=/sys/class/power_supply/BAT0
 
 read -r capacity < "$bat_dir/capacity"
 read -r status   < "$bat_dir/status"
 
-printf '%s%% [%s]\n' "$capacity" "$status"
+if [ "$1" = "notify" ]; then
+    command -v nfy >/dev/null || exit 1
+    nfy "Battery $capacity% ($status)"
+else
+    printf '%s%% (%s)\n' "$capacity" "$status"
+fi
