@@ -1,0 +1,182 @@
+#!/bin/sh
+
+#
+# rpg - random palette generator
+#       work in progres
+#
+
+add_sequence() {
+    seqs="$seqs]$1;$2\\";
+}
+
+hex() {
+    min=70
+    max=170
+
+    [ "$1" = "bg" ] && {
+        if [ "$mode" = "dark" ]; then
+            min=10
+            max=15
+        else
+            min=252
+            max=255
+        fi
+    }
+
+    [ "$1" = "fg" ] && {
+        if [ "$mode" = "dark" ]; then
+            min=225
+            max=255
+        else
+            min=15
+            max=45
+        fi
+    }
+
+    [ "$1" = "black" ] && {
+        if [ "$mode" = "dark" ]; then
+            min=80
+            max=90
+        else
+            min=140
+            max=150
+        fi
+    }
+
+    r=$(shuf -i "$min"-"$max" -n 1)
+    g=$(shuf -i "$min"-"$max" -n 1)
+    b=$(shuf -i "$min"-"$max" -n 1)
+
+    printf '#%02x%02x%02x\n' "$r" "$g" "$b"
+}
+
+add_color() {
+    printf '%s\n' "color$1=\"$2\"" >> "$cache_dir/colors"
+}
+
+print_palette() {
+    printf '\n'
+
+    for i in 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15; do
+        printf '\033[48;5;%sm    \033[m' "$i"
+
+        [ "$i" = 7 ] && printf '\n'
+    done
+
+    printf '\n\n'
+
+    exit
+}
+
+save_palette() {
+    [ -z "$RPG_SAVE" ] && {
+        printf 'RPG_SAVE is not set.\n'
+        exit 1
+    }
+
+    {
+        while IFS= read -r line; do
+            printf '%s\n' "$line"
+            return
+        done < "$cache_dir/mode"
+
+        m="$line"
+    }
+
+    d="$(date +%Y%m%d)"
+    t="$(date +%H%M%S)"
+    saved="${1:-"$d-$t"}"
+
+    mkdir -p "$RPG_SAVE/$m/$saved"
+
+    printf 'Saving %s palette "%s" to %s\n' "$m" "$saved" "$RPG_SAVE/$m"
+
+    cp "$cache_dir/sequences" "$RPG_SAVE/$m/$saved/"
+    cp "$cache_dir/colors" "$RPG_SAVE/$m/$saved/"
+
+    print_palette
+}
+
+main() {
+    mkdir -p "${cache_dir:=${HOME}/.cache/rpg}"
+
+    case $1 in
+        d|dark) mode=dark ;;
+        l|light) mode=light ;;
+        r|reload) cat "$cache_dir/sequences" 2>/dev/null; exit ;;
+        c|current) print_palette ;;
+        s|save) save_palette "$2" ;;
+        *) printf '%s\n' \
+            "Usage: rpg d|dark l|light r|reload c|current s|save NAME (optional)"
+            exit
+        ;;
+    esac
+
+    bg="$(hex "bg")"
+    fg="$(hex "fg")"
+    black="$(hex "black")"
+    red="$(hex)"
+    green="$(hex)"
+    yellow="$(hex)"
+    blue="$(hex)"
+    magenta="$(hex)"
+    cyan="$(hex)"
+
+    :> "$cache_dir/colors"
+
+    add_color "0" "$bg"
+    add_color "1" "$red"
+    add_color "2" "$green"
+    add_color "3" "$yellow"
+    add_color "4" "$blue"
+    add_color "5" "$magenta"
+    add_color "6" "$cyan"
+    add_color "7" "$fg"
+    add_color "8" "$black"
+    add_color "9" "$red"
+    add_color "10" "$green"
+    add_color "11" "$yellow"
+    add_color "12" "$blue"
+    add_color "13" "$magenta"
+    add_color "14" "$cyan"
+    add_color "15" "$fg"
+
+    add_sequence "4;0" "$bg"
+    add_sequence "4;1" "$red"
+    add_sequence "4;2" "$green"
+    add_sequence "4;3" "$yellow"
+    add_sequence "4;4" "$blue"
+    add_sequence "4;5" "$magenta"
+    add_sequence "4;6" "$cyan"
+    add_sequence "4;7" "$fg"
+    add_sequence "4;8" "$black"
+    add_sequence "4;9" "$red"
+    add_sequence "4;10" "$green"
+    add_sequence "4;11" "$yellow"
+    add_sequence "4;12" "$blue"
+    add_sequence "4;13" "$magenta"
+    add_sequence "4;14" "$cyan"
+    add_sequence "4;15" "$fg"
+    add_sequence "4;232" "$bg"
+    add_sequence "11" "$bg"
+    add_sequence "10" "$fg"
+    add_sequence "12" "$fg"
+    add_sequence "13" "$fg"
+    add_sequence "19" "$bg"
+    add_sequence "4;256" "$fg"
+
+    [ "$VTE_VERSION" ] || add_sequence "708" "$bg"
+
+    xsetroot -solid "$black"
+
+    for tty in /dev/fd/0 /dev/pts/[0-9]*; do
+        [ -w "$tty" ] && printf %b "$seqs" > "$tty" &
+    done
+
+    printf %b "$seqs" > "$cache_dir/sequences"
+    printf %s "$mode" > "$cache_dir/mode"
+
+    print_palette
+}
+
+main "$@"
