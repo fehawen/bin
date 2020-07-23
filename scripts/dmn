@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # shellcheck disable=SC1090
-[ -f ~/.cache/rpg/colors ] && . ~/.cache/rpg/colors &
+[ -f ~/.cache/rpg/colors ] && . ~/.cache/rpg/colors
 
 dmenu_run -i \
     -nb "${color8:=#777777}" \
