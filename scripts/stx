@@ -6,7 +6,7 @@ xinitrc() {
     [ -f ~/.Xresources ] && xrdb -merge ~/.Xresources &
 
     # shellcheck disable=SC1090
-    [ -f ~/.cache/rpg/colors ] && . ~/.cache/rpg/colors &
+    [ -f ~/.cache/rpg/colors ] && . ~/.cache/rpg/colors
 
     xsetroot -solid "${color8:=#777777}"
 
