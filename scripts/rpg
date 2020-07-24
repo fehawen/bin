@@ -16,30 +16,30 @@ hex() {
     [ "$1" = "bg" ] && {
         if [ "$mode" = "dark" ]; then
             min=10
-            max=15
+            max=30
         else
-            min=252
-            max=255
+            min=235
+            max=240
         fi
     }
 
     [ "$1" = "fg" ] && {
         if [ "$mode" = "dark" ]; then
-            min=225
-            max=255
+            min=205
+            max=245
         else
             min=15
-            max=45
+            max=55
         fi
     }
 
     [ "$1" = "black" ] && {
         if [ "$mode" = "dark" ]; then
             min=80
-            max=90
+            max=120
         else
-            min=140
-            max=150
+            min=100
+            max=140
         fi
     }
 
