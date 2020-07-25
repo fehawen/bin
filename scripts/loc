@@ -7,9 +7,9 @@
 [ -f "$1" ] || exit 1
 
 while IFS= read -r line || [ -n "$line" ]; do
-    all=$((all+1))
+    lines=$((lines+1))
     [ -z "$line" ] || {
-        lines=$((lines+1))
+        sloc=$((sloc+1))
     }
 done < "$1"
 
@@ -17,6 +17,4 @@ prin() {
     printf '%7s %s\n' "$1" "$2"
 }
 
-printf 'Number of lines in: %s\n' "$1"
-prin "$lines" "(without empty lines)"
-prin "$all" "(with empty lines)"
+printf '%s\n' "$lines lines ($sloc sloc)"
