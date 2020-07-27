@@ -60,7 +60,7 @@ main() {
     max="$((mode > 1 ? 160 : 190))"
     bg="$(hex "$((mode > 1 ? 235 : 20))" "$((mode > 1 ? 245 : 30))")"
     fg="$(hex "$((mode > 1 ? 15 : 205))" "$((mode > 1 ? 55 : 245))")"
-    black="$(hex "$((mode > 1 ? 100 : 80))" "$((mode > 1 ? 140 : 120))")"
+    black="$(hex "$((mode > 1 ? 100 : 80))" "$((mode > 1 ? 120 : 100))")"
     red="$(hex "$min" "$max")"
     green="$(hex "$min" "$max")"
     yellow="$(hex "$min" "$max")"
