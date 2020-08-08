@@ -1,0 +1,10 @@
+#!/bin/sh
+
+#
+# dts - date timestamp
+#
+# usage: dts [yyyy-mm-dd], dts [yyyy-mm-dd hh:mm:ss]
+
+[ "$1" ] || exit 1
+
+date --date="$1" +"%s"
