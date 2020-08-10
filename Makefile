@@ -10,6 +10,7 @@ install:
 	@cp -pv scripts/clk $(DESTDIR)$(PREFIX)/bin/clk
 	@cp -pv scripts/clo $(DESTDIR)$(PREFIX)/bin/clo
 	@cp -pv scripts/dmn $(DESTDIR)$(PREFIX)/bin/dmn
+	@cp -pv scripts/dts $(DESTDIR)$(PREFIX)/bin/dts
 	@cp -pv scripts/irc $(DESTDIR)$(PREFIX)/bin/irc
 	@cp -pv scripts/loc $(DESTDIR)$(PREFIX)/bin/loc
 	@cp -pv scripts/luv $(DESTDIR)$(PREFIX)/bin/luv
@@ -22,6 +23,7 @@ install:
 	@cp -pv scripts/scr $(DESTDIR)$(PREFIX)/bin/scr
 	@cp -pv scripts/sqh $(DESTDIR)$(PREFIX)/bin/sqh
 	@cp -pv scripts/stx $(DESTDIR)$(PREFIX)/bin/stx
+	@cp -pv scripts/tdo $(DESTDIR)$(PREFIX)/bin/tdo
 	@cp -pv scripts/tin $(DESTDIR)$(PREFIX)/bin/tin
 	@cp -pv scripts/vol $(DESTDIR)$(PREFIX)/bin/vol
 	@echo Add \'~/bin\' to PATH.
@@ -32,6 +34,7 @@ uninstall:
 	@rm -fv $(DESTDIR)$(PREFIX)/bin/clk
 	@rm -fv $(DESTDIR)$(PREFIX)/bin/clo
 	@rm -fv $(DESTDIR)$(PREFIX)/bin/dmn
+	@rm -fv $(DESTDIR)$(PREFIX)/bin/dts
 	@rm -fv $(DESTDIR)$(PREFIX)/bin/irc
 	@rm -fv $(DESTDIR)$(PREFIX)/bin/loc
 	@rm -fv $(DESTDIR)$(PREFIX)/bin/luv
