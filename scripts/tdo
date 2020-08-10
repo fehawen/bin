@@ -1,0 +1,64 @@
+#!/bin/sh
+
+#
+# tdo - todo helper
+#
+
+cd_or_exit() {
+    cd "$TODO_PATH" || exit 1
+}
+
+todo_push() {
+    (
+        cd_or_exit
+
+        git add .
+        git commit -m "Bump @ $(date '+%Y/%m/%d %H:%M')"
+        git push
+    )
+}
+
+todo_pull() {
+    (
+        cd_or_exit
+        git pull
+    )
+}
+
+todo_read() {
+    cat "$todo_file"
+}
+
+todo_edit() {
+    vim "$todo_file"
+}
+
+main() {
+    case $1 in
+        push) opt="push" ;;
+        pull) opt="pull" ;;
+        read) opt="read" ;;
+        edit) opt="edit" ;;
+    esac
+
+    [ -z "$opt" ] && {
+        printf '%s\n' "Usage: tdo push|pull|read|edit"
+        exit
+    }
+
+    [ -z "$TODO_PATH" ] && {
+        printf '%s\n' "TODO_PATH is not set."
+        exit 1
+    }
+
+    todo_file=${TODO_PATH%%/}/TODO
+
+    [ -f "$todo_file" ] || {
+        printf '%s\n' "No 'TODO' file found in TODO_PATH."
+        exit 1
+    }
+
+    todo_"$opt"
+}
+
+main "$@"
