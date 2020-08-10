@@ -4,13 +4,27 @@
 # rpg - random palette generator
 #
 
+add_export() {
+    printf '%s\n' "color$1=\"$2\"" >> "$cache_dir/colors"
+}
+
 add_sequence() {
     seqs="$seqs]$1;$2\\";
 
     case $1 in
         *";"*)
-            [ "${1##*;}" -lt 16 ] && {
-                printf '%s\n' "color${1##*;}=\"$2\"" >> "$cache_dir/colors"
+            c=${1##*;}
+
+            [ "$c" = 0 ] || [ "$c" = 8 ] && {
+                add_export "$c" "$2"
+            }
+
+            [ "$c" -gt 0 ] && [ "$c" -le 7 ] && {
+                b="${1%%;*};$((c+8))"
+                seqs="$seqs]$b;$2\\";
+
+                add_export "$c" "$2"
+                add_export "$((c+8))" "$2"
             }
         ;;
     esac
@@ -21,7 +35,7 @@ hex() {
 
     # shellcheck disable=SC2046
 
-    set -- $(shuf -i "$1"-"$2" -n 3)
+    set -- $(shuf -i "${1:-110}"-"${2:-190}" -n 3)
 
     printf '#%02x%02x%02x\n' "$1" "$2" "$3"
 
@@ -46,31 +60,27 @@ main() {
     mkdir -p "${cache_dir:=${HOME}/.cache/rpg}"
 
     case $1 in
-        d|dark) mode=1 ;;
-        l|light) mode=2 ;;
+        g|generate) ;;
         r|reload) cat "$cache_dir/sequences" 2>/dev/null; exit ;;
         c|current) print_palette ;;
         *) printf '%s\n' \
             "Usage: rpg [OPTION]" \
-            "d, dark       Generate a random dark palette" \
-            "l, light      Generate a random light palette" \
+            "g, generate   Generate random palette" \
             "r, reload     Reload current palette" \
             "c, current    Print current palette"
             exit
         ;;
     esac
 
-    min="$((mode > 1 ? 80 : 110))"
-    max="$((mode > 1 ? 160 : 190))"
-    bg="$(hex "$((mode > 1 ? 235 : 20))" "$((mode > 1 ? 245 : 30))")"
-    fg="$(hex "$((mode > 1 ? 15 : 205))" "$((mode > 1 ? 55 : 245))")"
-    black="$(hex "$((mode > 1 ? 100 : 80))" "$((mode > 1 ? 120 : 100))")"
-    red="$(hex "$min" "$max")"
-    green="$(hex "$min" "$max")"
-    yellow="$(hex "$min" "$max")"
-    blue="$(hex "$min" "$max")"
-    magenta="$(hex "$min" "$max")"
-    cyan="$(hex "$min" "$max")"
+    bg="$(hex "0" "20")"
+    fg="#FFFFFF"
+    black="$(hex "80" "100")"
+    red="$(hex)"
+    green="$(hex)"
+    yellow="$(hex)"
+    blue="$(hex)"
+    magenta="$(hex)"
+    cyan="$(hex)"
 
     :> "$cache_dir/colors"
 
@@ -83,13 +93,6 @@ main() {
     add_sequence "4;6" "$cyan"
     add_sequence "4;7" "$fg"
     add_sequence "4;8" "$black"
-    add_sequence "4;9" "$red"
-    add_sequence "4;10" "$green"
-    add_sequence "4;11" "$yellow"
-    add_sequence "4;12" "$blue"
-    add_sequence "4;13" "$magenta"
-    add_sequence "4;14" "$cyan"
-    add_sequence "4;15" "$fg"
     add_sequence "4;232" "$bg"
     add_sequence "11" "$bg"
     add_sequence "10" "$fg"
