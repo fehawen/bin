@@ -16,13 +16,24 @@ add_sequence() {
     esac
 }
 
-hex() {
+rgb() {
     set -f
 
     # shellcheck disable=SC2046
-    set -- $(shuf -i "${1:-60}"-"${2:-160}" -n 3)
+    set -- $(shuf -i "$1"-"$2" -n 1)
 
-    printf '#%02x%02x%02x\n' "$1" "$2" "$3"
+    printf '%02x\n' "$1"
+
+    set +f
+}
+
+
+hex() {
+    r=$(rgb "${1:-120}" "${2:-240}")
+    g=$(rgb "${3:-120}" "${4:-240}")
+    b=$(rgb "${5:-120}" "${6:-240}")
+
+    printf '#%s%s%s\n' "$r" "$g" "$b"
 
     set +f
 }
@@ -57,9 +68,11 @@ main() {
         ;;
     esac
 
-    bg="$(hex "0" "10")"
-    fg="#FFFFFF"
-    black="$(hex "40" "50")"
+    bg="#152232"
+    #bg="$(hex "20" "30" "30" "40" "40" "50")"
+    fg="#ddeafa"
+    black="#475464"
+    #black="$(hex "60" "70" "70" "80" "80" "90")"
     red="$(hex)"
     green="$(hex)"
     yellow="$(hex)"
