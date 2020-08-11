@@ -27,7 +27,7 @@ confirm() {
     exit
   else
     echo "Executing..."
-    $1 && luv
+    $1
     echo "Done."
   fi
 }
