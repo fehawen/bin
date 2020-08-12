@@ -78,6 +78,7 @@ main() {
 
     :> "$cache_dir/colors"
 
+    # Regular colors
     add_sequence "4;0" "$bg"
     add_sequence "4;1" "$red"
     add_sequence "4;2" "$green"
@@ -94,14 +95,31 @@ main() {
     add_sequence "4;13" "$magenta"
     add_sequence "4;14" "$cyan"
     add_sequence "4;15" "$fg"
-    add_sequence "4;232" "$bg"
-    add_sequence "11" "$bg"
+
+    # Special colors
+    # 10:  Foreground color
+    # 11:  Background color
+    # 12:  Cursor foreground color
+    # 13:  Mouse foreground color
+    # 17:  Highlight background Color
+    # 19:  Highlight foreground Color
+    # 256: Cursor color
+    # 257: Reversed cursor color
+    # 258: Background color
+    # 259: Foreground color
     add_sequence "10" "$fg"
+    add_sequence "11" "$bg"
     add_sequence "12" "$fg"
     add_sequence "13" "$fg"
-    add_sequence "19" "$bg"
+    add_sequence "17" "$bg"
+    add_sequence "19" "$fg"
     add_sequence "4;256" "$fg"
+    add_sequence "4;257" "$bg"
+    add_sequence "4;258" "$bg"
+    add_sequence "4;259" "$fg"
 
+    # Unless VTE
+    # 708: Border color
     [ "$VTE_VERSION" ] || add_sequence "708" "$bg"
 
     command -v xsetroot >/dev/null && xsetroot -solid "$black"
