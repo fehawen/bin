@@ -1,0 +1,20 @@
+#!/bin/sh
+
+#
+# hnt - Find all subdirs/filenames in dirs/subdirs matching query
+#
+
+[ "$1" ] || exit 1
+
+grep \
+    --exclude-dir=node_modules \
+    --exclude-dir=coverage \
+    --exclude-dir=.fusebox \
+    --exclude-dir=.next \
+    --exclude-dir=dist \
+    --exclude-dir=.git \
+    -wroni "$1" . \
+    | sort -u \
+    | grep -iv "^$1" \
+    | sed "/^$/d" \
+    | grep -i --color=always "$1"
