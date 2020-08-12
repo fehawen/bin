@@ -1,0 +1,17 @@
+#!/bin/sh
+
+#
+# mrk - Find all files in dirs/subdirs matching query
+#
+
+[ "$1" ] || exit 1
+
+find . \
+    -not -path "*node_modules*" \
+    -not -path "*.fusebox*" \
+    -not -path "*.next*" \
+    -not -path "*dist*" \
+    -not -path "*.git*" \
+    -iname "*$1*" \
+    | sort -u \
+    | grep -i --color=always "$1"
