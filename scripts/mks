@@ -5,6 +5,6 @@
     exit 1
 }
 
-printf '#!/bin/sh\n' > "$1"
+printf '#!/bin/sh\n\n#\n# %s\n#' "$1" > "$1"
 chmod +x "$1"
 vim "$1"
