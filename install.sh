@@ -16,7 +16,7 @@ u() {
     [ -d "$prefix/$dest" ] || exit 1
 
     for file in "$src"/*; do
-        rm -v "$prefix/$dest/$file"
+        rm -v "$prefix/$dest/${file##*/}"
     done
 }
 
