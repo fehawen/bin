@@ -37,13 +37,15 @@ hex() {
 }
 
 print_palette() {
+    printf '\n'
+
     for i in 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15; do
-        printf '\033[38;5;%sm⬛\033[m' "$i"
+        printf '\033[48;5;%sm    \033[m' "$i"
 
         [ "$i" = 7 ] && printf '\n'
     done
 
-    printf '\n'
+    printf '\n\n'
 
     exit
 }
@@ -59,9 +61,9 @@ main() {
         c|current) print_palette ;;
         *) printf '%s\n' \
             "Usage: rpg [OPTION]" \
-            "g, generate   Generate random palette" \
-            "r, reload     Reload current palette" \
-            "c, current    Print current palette"
+            "  g, generate   Generate random palette" \
+            "  r, reload     Reload current palette" \
+            "  c, current    Print current palette"
             exit
         ;;
     esac
