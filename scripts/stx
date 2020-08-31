@@ -1,32 +1,46 @@
 #!/bin/sh
 
-xinitrc() {
-    export DISPLAY=:0
+cleanup() {
+    if [ "$pid" ] && kill -0 "$pid" 2> /dev/null; then
+        kill -s TERM "$pid"
+        wait "$pid"
+        r=$?
+    fi
 
-    [ -f ~/.Xresources ] && xrdb -merge ~/.Xresources &
+    if ! stty "$stty"; then
+        stty sane
+    fi
 
-    # shellcheck disable=SC1090
-    [ -f ~/.cache/rpg/colors ] && . ~/.cache/rpg/colors
-
-    xsetroot -solid "${color8:=#777777}"
-
-    xset +fp ~/.fonts
-
-    setxkbmap -layout se &
-
-    exec sowm
+    xauth remove :"$tty"
+    exit "${r:-$?}"
 }
 
-trap xinitrc USR1
+stty=$(stty -g)
+tty=$(tty)
+tty=${tty#/dev/tty}
+
+xdir=$HOME/.stx
+mkdir -p "$xdir"
+
+export XAUTHORITY=$xdir/xauthority
+touch "$XAUTHORITY"
+
+trap cleanup EXIT
+
+xauth add :"$tty" MIT-MAGIC-COOKIE-1 "$(od -An -N16 -tx /dev/urandom | tr -d ' ')"
+
+xrc=$HOME/.xrc
+
+trap 'DISPLAY=:$tty "$xrc"' USR1
 
 (
-    trap '' USR1
-
-    exec X -ardelay 250 \
+    trap '' USR1 && exec Xorg :"$tty" \
+        -keeptty vt"$tty" \
+        -noreset \
+        -ardelay 250 \
         -arinterval 25 \
         -nolisten tcp \
-        -keeptty \
-        :0 vt1 -quiet
-) &
+        -auth "$XAUTHORITY"
+) & pid=$!
 
-wait
+wait "$pid"
