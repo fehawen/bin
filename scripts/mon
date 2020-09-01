@@ -1,15 +1,20 @@
 #!/bin/sh
+
 #
 # Set output to external monitor(s).
 #
+
 # Usage: mon, mon [auto]
 
 command -v xrandr >/dev/null || {
-    printf 'err: %s\n' "command 'xrandr' not found."
+    printf 'err: command "xrandr" not found.\n'
     exit 1
 }
 
-[ "$1" = "auto" ] && xrandr --auto
+[ "$1" = "auto" ] && {
+    xrandr --auto
+    exit 0
+}
 
 internal_output="$(xrandr | grep "primary" | awk '{print $1}')"
 external_output_1="$(xrandr | grep -w "connected" | awk '{if(NR>1)print $1}' | head -1)"
