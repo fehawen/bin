@@ -1,5 +1,10 @@
 #!/bin/sh
 
+[ "$1" = "stop" ] && {
+    kill -s TERM "$(pgrep "${0##*/}" | head -n 1)"
+    exit 0
+}
+
 cleanup() {
     if [ "$pid" ] && kill -0 "$pid" 2> /dev/null; then
         kill -s TERM "$pid"
@@ -7,29 +12,20 @@ cleanup() {
         r=$?
     fi
 
-    if ! stty "$stty"; then
-        stty sane
-    fi
-
-    xauth remove :"$tty"
     exit "${r:-$?}"
 }
 
-stty=$(stty -g)
 tty=$(tty)
 tty=${tty#/dev/tty}
 
-xdir=$HOME/.stx
-mkdir -p "$xdir"
-
-export XAUTHORITY=$xdir/xauthority
-touch "$XAUTHORITY"
-
 trap cleanup EXIT
 
-xauth add :"$tty" MIT-MAGIC-COOKIE-1 "$(od -An -N16 -tx /dev/urandom | tr -d ' ')"
-
 xrc=$HOME/.xrc
+
+[ -f "$xrc" ] || {
+    printf 'Missing config: %s\n' "$xrc"
+    exit 1
+}
 
 trap 'DISPLAY=:$tty "$xrc"' USR1
 
@@ -39,8 +35,7 @@ trap 'DISPLAY=:$tty "$xrc"' USR1
         -noreset \
         -ardelay 250 \
         -arinterval 25 \
-        -nolisten tcp \
-        -auth "$XAUTHORITY"
+        -nolisten tcp
 ) & pid=$!
 
 wait "$pid"
