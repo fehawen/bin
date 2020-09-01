@@ -1,41 +1,30 @@
 #!/bin/sh
 
-[ "$1" = "stop" ] && {
-    kill -s TERM "$(pgrep "${0##*/}" | head -n 1)"
-    exit 0
+xinitrc() {
+    [ -f ~/.Xresources ] && xrdb -merge ~/.Xresources &
+
+    # shellcheck disable=SC1090
+    [ -f ~/.cache/rpg/colors ] && . ~/.cache/rpg/colors
+
+    xsetroot -solid "${color8:=#777777}"
+
+    xset +fp ~/.fonts
+
+    setxkbmap -layout se &
+
+    exec sowm
 }
 
-cleanup() {
-    if [ "$pid" ] && kill -0 "$pid" 2> /dev/null; then
-        kill -s TERM "$pid"
-        wait "$pid"
-        r=$?
-    fi
-
-    exit "${r:-$?}"
-}
-
-tty=$(tty)
-tty=${tty#/dev/tty}
-
-trap cleanup EXIT
-
-xrc=$HOME/.xrc
-
-[ -x "$xrc" ] || {
-    printf 'Config file "%s" is either missing or not executable.\n' "$xrc"
-    exit 1
-}
-
-trap 'DISPLAY=:$tty "$xrc"' USR1
+trap 'xinitrc' USR1
 
 (
-    trap '' USR1 && exec Xorg :"$tty" \
-        -keeptty vt"$tty" \
-        -noreset \
+    trap '' USR1
+
+    exec Xorg \
         -ardelay 250 \
         -arinterval 25 \
-        -nolisten tcp
-) & pid=$!
+        -nolisten tcp \
+        :0 vt1
+) &
 
-wait "$pid"
+wait
