@@ -22,8 +22,8 @@ trap cleanup EXIT
 
 xrc=$HOME/.xrc
 
-[ -f "$xrc" ] || {
-    printf 'Missing config: %s\n' "$xrc"
+[ -x "$xrc" ] || {
+    printf 'Config file "%s" is either missing or not executable.\n' "$xrc"
     exit 1
 }
 
