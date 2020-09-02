@@ -18,14 +18,21 @@ command -v xrandr >/dev/null || {
 
 internal_output="$(xrandr | grep "primary" | awk '{print $1}')"
 external_output_1="$(xrandr | grep -w "connected" | awk '{if(NR>1)print $1}' | head -1)"
-external_output_2="$(xrandr | grep -w "connected" | awk '{if(NR>2)print $1}')"
+external_output_2="$(xrandr | grep -w "connected" | awk '{if(NR>2)print $1}' | head -1)"
+external_output_3="$(xrandr | grep -w "connected" | awk '{if(NR>3)print $1}' | head -1)"
 
-if [ -n "$external_output_1" ] && [ -n "$external_output_2" ]; then
+if [ -n "$external_output_1" ] && [ -n "$external_output_2" ] && [ -n "$external_output_2" ]; then
+    xrandr \
+        --output "$internal_output" --off \
+        --output "$external_output_1" --auto \
+        --output "$external_output_2" --auto --right-of "$external_output_1" \
+        --output "$external_output_3" --auto --right-of "$external_output_2"
+elif [ -n "$external_output_1" ] && [ -n "$external_output_2" ]; then
     xrandr \
         --output "$internal_output" --off \
         --output "$external_output_1" --auto \
         --output "$external_output_2" --auto --right-of "$external_output_1"
-elif [ -n "$external_output_1" ] && [ -z "$external_output_2" ]; then
+elif [ -n "$external_output_1" ]; then
     xrandr \
         --output "$internal_output" --off \
         --output "$external_output_1" --auto
