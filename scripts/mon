@@ -16,26 +16,37 @@ command -v xrandr >/dev/null || {
     exit 0
 }
 
-internal_output="$(xrandr | grep "primary" | awk '{print $1}')"
-external_output_1="$(xrandr | grep -w "connected" | awk '{if(NR>1)print $1}' | head -1)"
-external_output_2="$(xrandr | grep -w "connected" | awk '{if(NR>2)print $1}' | head -1)"
-external_output_3="$(xrandr | grep -w "connected" | awk '{if(NR>3)print $1}' | head -1)"
+log() {
+    printf 'Using display(s): %s\n' "$*"
+}
 
-if [ -n "$external_output_1" ] && [ -n "$external_output_2" ] && [ -n "$external_output_2" ]; then
+dpy_a="$(xrandr | grep "primary" | awk '{print $1}')"
+dpy_b="$(xrandr | grep -w "connected" | awk '{if(NR>1)print $1}' | head -1)"
+dpy_c="$(xrandr | grep -w "connected" | awk '{if(NR>2)print $1}' | head -1)"
+dpy_d="$(xrandr | grep -w "connected" | awk '{if(NR>3)print $1}' | head -1)"
+
+if [ -n "$dpy_b" ] && [ -n "$dpy_c" ] && [ -n "$dpy_d" ]; then
+    log "$dpy_b" "$dpy_c" "$dpy_d"
+
     xrandr \
-        --output "$internal_output" --off \
-        --output "$external_output_1" --auto \
-        --output "$external_output_2" --auto --right-of "$external_output_1" \
-        --output "$external_output_3" --auto --right-of "$external_output_2"
-elif [ -n "$external_output_1" ] && [ -n "$external_output_2" ]; then
+        --output "$dpy_a" --off \
+        --output "$dpy_b" --auto \
+        --output "$dpy_c" --auto --right-of "$dpy_b" \
+        --output "$dpy_d" --auto --right-of "$dpy_c"
+elif [ -n "$dpy_b" ] && [ -n "$dpy_c" ]; then
+    log "$dpy_b" "$dpy_c"
+
     xrandr \
-        --output "$internal_output" --off \
-        --output "$external_output_1" --auto \
-        --output "$external_output_2" --auto --right-of "$external_output_1"
-elif [ -n "$external_output_1" ]; then
+        --output "$dpy_a" --off \
+        --output "$dpy_b" --auto \
+        --output "$dpy_c" --auto --right-of "$dpy_b"
+elif [ -n "$dpy_b" ]; then
+    log "$dpy_b"
+
     xrandr \
-        --output "$internal_output" --off \
-        --output "$external_output_1" --auto
+        --output "$dpy_a" --off \
+        --output "$dpy_b" --auto
 else
+    log "$dpy_a [internal/auto]"
   xrandr --auto
 fi
