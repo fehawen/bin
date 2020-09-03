@@ -1,0 +1,26 @@
+#!/bin/sh
+
+#
+# wpp - wallpaper
+#
+
+die() {
+    printf '\033[1;31m%s\033[m\n' "$*"
+    exit 1
+}
+
+command -v feh > /dev/null || die "feh is not installed."
+
+[ -z "$WPP_LIB" ] && die "WPP_LIB is not set."
+
+set -f -- "${WPP_LIB%%/}"/*
+
+shift "$(shuf -i "1-$#" -n 1)"
+
+while [ ! -f "$1" ] && [ "$2" ]; do shift; done
+
+[ -f "$1" ] || die "Failed to select a random wallpaper."
+
+feh --bg-fill "$1"
+
+set +f
