@@ -8,8 +8,6 @@ log() {
     printf '%s: %s\n' "$1" "${2##*/}"
 }
 
-printf '\n'
-
 for dir in ~/github/bin \
     ~/github/cpr \
     ~/dotfiles \
@@ -33,5 +31,3 @@ for dir in ~/github/bin \
         fi
     )
 done
-
-printf '\n'
