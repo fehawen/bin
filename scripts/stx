@@ -7,6 +7,8 @@ xinitrc() {
 
     xset +fp ~/.fonts
 
+    xset b off
+
     setxkbmap -layout se &
 
     exec sowm
