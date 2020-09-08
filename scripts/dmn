@@ -4,5 +4,5 @@ dmenu_run -i \
     -nb "#022527" \
     -nf "#8cbeb8" \
     -sb "#022527" \
-    -sf "#fb0029" \
+    -sf "#fb1200" \
     -fn "RobotoMono-28"
