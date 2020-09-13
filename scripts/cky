@@ -1,0 +1,13 @@
+#!/bin/sh
+
+#
+# cky - conky
+#
+
+killall -q conky
+
+while pgrep -x conky > /dev/null; do
+    sleep 1;
+done
+
+conky -c ~/.conkyrc -d
