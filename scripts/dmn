@@ -1,8 +1,11 @@
 #!/bin/sh
 
+# shellcheck disable=SC1090
+[ -f ~/.cache/rpg/colors ] && . ~/.cache/rpg/colors
+
 dmenu_run -i \
-    -nb "#022527" \
-    -nf "#8cbeb8" \
-    -sb "#022527" \
-    -sf "#fb1200" \
+    -nb "${color8:=#777777}" \
+    -nf "${color0:=#000000}" \
+    -sb "${color8:=#777777}" \
+    -sf "${color15:=#FFFFFF}" \
     -fn "RobotoMono-28"
