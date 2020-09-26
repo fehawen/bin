@@ -9,7 +9,7 @@ die() {
     exit 1
 }
 
-command -v feh > /dev/null || die "feh is not installed."
+command -v feh >/dev/null || die "feh is not installed."
 
 [ -z "$WPP_LIB" ] && die "WPP_LIB is not set."
 
@@ -22,5 +22,7 @@ while [ ! -f "$1" ] && [ "$2" ]; do shift; done
 [ -f "$1" ] || die "Failed to select a random wallpaper."
 
 feh --bg-fill "$1"
+
+printf 'Using wallpaper: \n%s\n' "${1##*/}"
 
 set +f
