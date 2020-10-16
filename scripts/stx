@@ -3,7 +3,7 @@
 xinitrc() {
     [ -f ~/.Xresources ] && xrdb -merge ~/.Xresources &
 
-    xsetroot -solid "#1e1f19"
+    xsetroot -solid "#22231d"
 
     xset +fp ~/.fonts
 
