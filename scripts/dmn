@@ -1,8 +1,8 @@
 #!/bin/sh
 
 dmenu_run -i \
-    -nb "#21221d" \
-    -nf "#f8f8f2" \
-    -sb "#21221d" \
-    -sf "#65d6eb" \
+    -nb "#022527" \
+    -nf "#8cbeb8" \
+    -sb "#022527" \
+    -sf "#ea3e20" \
     -fn "SFMono-28"
