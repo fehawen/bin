@@ -4,21 +4,25 @@
 # cky - conky
 #
 
+killall -q conky
+
 # shellcheck disable=SC1090
 [ -f ~/.cache/rpg/colors ] && . ~/.cache/rpg/colors
 
 printf '%s' "$(cat << CONF
 conky.config = {
-    alignment = 'bottom_middle',
+    alignment = 'top_left',
     background = true,
     default_color = '${color0:=#000000}',
     double_buffer = true,
-    font = 'SF Mono:size=26:style=bold',
+    font = 'SF Mono:size=32:style=medium',
+    font2 = 'SF Mono:size=96:style=regular',
+    font3 = 'IcoFont:size=26:style=regular',
     draw_shades = false,
     draw_outline = false,
     draw_borders = false,
-    gap_x = 0,
-    gap_y = 30,
+    gap_x = 220,
+    gap_y = 200,
     out_to_console = false,
     out_to_ncurses = false,
     out_to_stderr = false,
@@ -32,15 +36,28 @@ conky.config = {
 }
 
 conky.text = [[
-\${time %H:%M}  \${wireless_essid wlp2s0}  \${battery_percent}%
+\${font2}\${time %H:%M}\${font}
+\${time %A %d %B}
+
+\${voffset 8}\${font3} \${voffset -8}\${font}\${kernel}
+\${voffset 8}\${font3} \${voffset -8}\${font}\${exec pac}
+
+\${voffset 8}\${font3} \${voffset -8}\${font}\${wireless_essid wlp2s0}
+\${voffset 8}\${font3} \${voffset -8}\${font}\${addrs wlp2s0}
+
+\${voffset 8}\${font3} \${voffset -8}\${font}\${battery_percent}%
+\${voffset 8}\${font3} \${voffset -8}\${font}\${exec pamixer --get-volume-human}
+\${voffset 8}\${font3} \${voffset -8}\${font}\${exec xbacklight -get | cut -d. -f1}%
+
+\${voffset 8}\${font3} \${voffset -8}\${font}\${fs_free /}
+\${voffset 8}\${font3} \${voffset -8}\${font}\${memeasyfree}
+\${voffset 8}\${font3} \${voffset -8}\${font}\${swapfree}
+
+\${voffset 8}\${font3} \${voffset -8}\${font}\${cpu cpu0}%
 ]];
 CONF
 )" > ~/.conkyrc
 
-killall -q conky
-
-while pgrep -x conky > /dev/null; do
-    sleep 1;
-done
+while pgrep -x conky > /dev/null; do (:;:); done
 
 conky -c ~/.conkyrc -d
