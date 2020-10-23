@@ -9,8 +9,19 @@ log() {
 }
 
 for dir in ~/github/bin \
-    ~/github/cpr \
+    ~/projects/bymates \
+    ~/projects/jackieshop \
+    ~/packages/st \
+    ~/packages/sowm \
     ~/dotfiles \
+    ~/.vim/plugged/cs.vim \
+    ~/.vim/plugged/sl.vim \
+    ~/github/cpr \
+    ~/github/todo \
+    ~/github/typography \
+    ~/github/onemoresalary \
+    ~/github/fehawen-files \
+    ~/github/lipp \
     ~/github/rpg; do
     (
         [ -d $dir ] || {
@@ -24,10 +35,6 @@ for dir in ~/github/bin \
             exit
         }
 
-        if [ -z "$(git status --short 2> /dev/null)" ]; then
-            log "clean" "$dir"
-        else
-            log "dirty" "$dir"
-        fi
+        [ -z "$(git status --short 2> /dev/null)" ] || log "dirty" "$dir"
     )
 done
