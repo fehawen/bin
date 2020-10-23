@@ -14,7 +14,9 @@ xinitrc() {
 
     setxkbmap -layout se &
 
-    exec sowm
+    sowm &
+
+    exec cky
 }
 
 trap 'xinitrc' USR1
