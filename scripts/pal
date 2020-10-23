@@ -1,0 +1,15 @@
+#!/bin/sh
+
+#
+# pal
+#
+
+[ "$1" = "dark" ] && {
+    rpg d
+    cky
+}
+
+[ "$1" = "light" ] && {
+    rpg l
+    cky
+}
