@@ -16,13 +16,13 @@ conky.config = {
     default_color = '${color0:=#000000}',
     double_buffer = true,
     font = 'SF Mono:size=28:style=medium',
-    font2 = 'SF Mono:size=96:style=medium',
+    font2 = 'SF Mono:size=84:style=medium',
     font3 = 'IcoFont:size=22:style=regular',
     draw_shades = false,
     draw_outline = false,
     draw_borders = false,
-    gap_x = 70,
-    gap_y = 40,
+    gap_x = 150,
+    gap_y = 130,
     out_to_console = false,
     out_to_ncurses = false,
     out_to_stderr = false,
@@ -37,23 +37,9 @@ conky.config = {
 
 conky.text = [[
 \${font2}\${time %H:%M}\${font}
-\${time %A %d %B}
-
-\${voffset 8}\${font3} \${voffset -8}\${font}\${kernel}
-\${voffset 8}\${font3} \${voffset -8}\${font}\${exec pac}
-
+\${voffset 8}\${font3} \${voffset -8}\${font}\${time %A %d %B}
 \${voffset 8}\${font3} \${voffset -8}\${font}\${wireless_essid wlp2s0}
-\${voffset 8}\${font3} \${voffset -8}\${font}\${addrs wlp2s0}
-
 \${voffset 8}\${font3} \${voffset -8}\${font}\${battery_percent}%
-\${voffset 8}\${font3} \${voffset -8}\${font}\${exec pamixer --get-volume-human}
-\${voffset 8}\${font3} \${voffset -8}\${font}\${exec xbacklight -get | cut -d. -f1}%
-
-\${voffset 8}\${font3} \${voffset -8}\${font}\${fs_free /}
-\${voffset 8}\${font3} \${voffset -8}\${font}\${memeasyfree}
-\${voffset 8}\${font3} \${voffset -8}\${font}\${swapfree}
-
-\${voffset 8}\${font3} \${voffset -8}\${font}\${cpu cpu0}%
 ]];
 CONF
 )" > ~/.conkyrc
