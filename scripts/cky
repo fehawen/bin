@@ -17,7 +17,7 @@ conky.config = {
     double_buffer = true,
     font = 'SF Mono:size=28:style=medium',
     font2 = 'SF Mono:size=84:style=medium',
-    font3 = 'IcoFont:size=22:style=regular',
+    font3 = 'IcoFont:size=28:style=regular',
     draw_shades = false,
     draw_outline = false,
     draw_borders = false,
@@ -37,10 +37,11 @@ conky.config = {
 
 conky.text = [[
 \${font2}\${time %H:%M}\${font}
-\${voffset 8}\${font3} \${voffset -8}\${font}\${time %A %d %B}
-\${voffset 8}\${font3} \${voffset -8}\${font}\${execi 3600 curl wttr.in/Stockholm?format="%C+%t+%p+%h\n"}
-\${voffset 8}\${font3} \${voffset -8}\${font}\${wireless_essid wlp2s0}
-\${voffset 8}\${font3} \${voffset -8}\${font}\${battery_percent}%
+\${time %A %d %B}
+
+\${voffset 5}\${font3} \${voffset -5}\${font}\${execi 3600 curl wttr.in/Stockholm?format="%C+%t+%p+%h\n"}
+\${voffset 5}\${font3} \${voffset -5}\${font}\${wireless_essid wlp2s0}
+\${voffset 5}\${font3} \${voffset -5}\${font}\${battery_percent}%
 ]];
 CONF
 )" > ~/.conkyrc
