@@ -6,6 +6,11 @@
 # original author: dylan araps
 #
 
+die() {
+    printf '\033[1;31m%s\033[m\n' "$@"
+    exit 1
+}
+
 add_sequence() {
     seqs="$seqs]$1;$2\\";
 
@@ -67,17 +72,14 @@ activate_palette() {
     printf %b "$seqs" > "$cache_dir/sequences"
 }
 
-img() {
-    [ -d "$1" ] && {
-        set +f
-        set -f -- "$1/"*
-        shift "$(shuf -i "1-$#" -n 1)"
-    }
+random_img() {
+    set +f
+    set -f -- "$1/"*
+    shift "$(shuf -i "1-$#" -n 1)"
 
-    [ -f "${img:=$1}" ] || {
-        printf 'No img.\n'
-        exit 1
-    }
+    while [ ! -f "$1" ] && [ "$2" ]; do shift; done
+
+    [ -f "${img:=$1}" ] || die "Failed to select a random img."
 }
 
 hex2rgb() {
@@ -113,6 +115,7 @@ mod() {
 }
 
 convert_colors() {
+    # shellcheck disable=2046,2006
     set -- `\
         convert "$img" \
             -alpha off \
@@ -153,13 +156,21 @@ main() {
     mkdir -p "${cache_dir:=${XDG_CACHE_HOME:=${HOME}/.cache}/bud}"
     :> "$cache_dir/colors"
 
-    img "$1"
+    [ -n "$BUD_LIB" ] || die "BUD_LIB is not set."
+    [ -d "$BUD_LIB" ] || die "$BUD_LIB is not a directory."
+
+    set -- "${BUD_LIB%%/}/"
+
+    random_img "$@"
 
     feh --bg-fill "$img"
 
     convert_colors
+
     make_sequences
+
     activate_palette
+
     print_current
 }
 
