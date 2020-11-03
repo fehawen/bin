@@ -15,8 +15,8 @@ conky.config = {
     background = true,
     default_color = '${color0:-"#000000"}',
     double_buffer = true,
-    font = 'Roboto Mono:size=28:style=medium',
-    font2 = 'Roboto Mono:size=84:style=medium',
+    font = 'Roboto Mono:size=30:style=medium',
+    font2 = 'Roboto Mono:size=90:style=medium',
     font3 = 'IcoFont:size=28:style=regular',
     draw_shades = false,
     draw_outline = false,
@@ -43,7 +43,7 @@ conky.text = [[
 \${font2}\${time %H:%M}\${font}
 \${time %A %d %B}
 
-\${voffset 5}\${font3} \${voffset -5}\${font}\${execi 3600 curl wttr.in/Stockholm?format="%C+%t+%p+%h\n"}
+\${voffset 5}\${font3} \${voffset -5}\${font}\${execi 3600 curl wttr.in/Stockholm?format="%C+%t+%h+%p\n"}
 \${voffset 5}\${font3} \${voffset -5}\${font}\${wireless_essid wlp2s0}
 \${voffset 5}\${font3} \${voffset -5}\${font}\${battery_percent}%
 ]];
