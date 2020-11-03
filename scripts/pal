@@ -5,11 +5,11 @@
 #
 
 [ "$1" = "dark" ] && {
-    rpg d
-    cky
+    rpg d 1> /dev/null 2> /dev/null
+    cky 1> /dev/null 2> /dev/null
 }
 
 [ "$1" = "light" ] && {
-    rpg l
-    cky
+    rpg l 1> /dev/null 2> /dev/null
+    cky 1> /dev/null 2> /dev/null
 }
