@@ -1,8 +1,8 @@
 #!/bin/sh
 
 dmenu_run -i \
-    -nb "#252831" \
-    -nf "#e8e8e8" \
-    -sb "#85edb3" \
-    -sf "#252831" \
+    -nb "#182226" \
+    -nf "#b2bebf" \
+    -sb "#b48291" \
+    -sf "#182226" \
     -fn "RobotoMono-26"
