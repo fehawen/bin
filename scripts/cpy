@@ -1,0 +1,14 @@
+#!/bin/sh
+
+#
+# cpy
+#
+
+[ "$1" ] || exit 1
+
+[ -f "$1" ] || {
+    printf 'Not a file: %s\n' "$1"
+    exit 1
+}
+
+xclip -selection clipboard < "$1"
