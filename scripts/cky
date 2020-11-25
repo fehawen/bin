@@ -4,25 +4,31 @@
 # cky - conky
 #
 
-killall -q conky
-
 # shellcheck disable=SC1090
-[ -f ~/.cache/rpg/colors ] && . ~/.cache/rpg/colors
+[ -f ~/.cache/pap/colors ] && . ~/.cache/pap/colors
+
+killall -q conky
 
 printf '%s' "$(cat << CONF
 conky.config = {
     alignment = 'top_left',
     background = true,
-    default_color = '${color0:-"#000000"}',
+    default_color = '${color7:=#FFFFFF}',
+    color1 = '${color1:=#FFFFFF}',
+    color2 = '${color2:=#FFFFFF}',
+    color3 = '${color3:=#FFFFFF}',
+    color4 = '${color4:=#FFFFFF}',
+    color5 = '${color5:=#FFFFFF}',
+    color6 = '${color6:=#FFFFFF}',
     double_buffer = true,
-    font = 'Roboto Mono:size=30:style=medium',
-    font2 = 'Roboto Mono:size=90:style=medium',
-    font3 = 'IcoFont:size=28:style=regular',
+    font = 'JetBrains Mono:size=24:style=medium',
+    font1 = 'JetBrains Mono:size=72:style=medium',
+    font2 = 'IcoFont:size=40:style=regular',
     draw_shades = false,
     draw_outline = false,
     draw_borders = false,
-    gap_x = 130,
-    gap_y = 110,
+    gap_x = 90,
+    gap_y = 70,
     out_to_console = false,
     out_to_ncurses = false,
     out_to_stderr = false,
@@ -40,12 +46,13 @@ conky.config = {
 }
 
 conky.text = [[
-\${font2}\${time %H:%M}\${font}
-\${time %A %d %B}
+\${color3}\${font1}\${time %H:%M}\${font}
+\${color2}\${time %A %d %B}
 
-\${voffset 5}\${font3} \${voffset -5}\${font}\${execi 3600 curl wttr.in/Stockholm?format="%C+%t+%h+%p\n"}
-\${voffset 5}\${font3} \${voffset -5}\${font}\${wireless_essid wlp2s0}
-\${voffset 5}\${font3} \${voffset -5}\${font}\${battery_percent}%
+\${color6}\${voffset 7}\${font2}\${color}\${voffset -7}\${font}  \${execi 3600 pac}
+\${color5}\${voffset 7}\${font2}\${color}\${voffset -7}\${font}  \${wireless_essid wlp2s0}
+\${color1}\${voffset 7}\${font2}\${color}\${voffset -7}\${font}  \${battery_percent}%
+
 ]];
 CONF
 )" > ~/.conkyrc
