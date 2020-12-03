@@ -147,16 +147,12 @@ convert_colors() {
         done
     )
 
-    # These variables are dynamically defined,
-    # ignore undeclared variable warnings.
     # shellcheck disable=2154
+
     {
-        # mod bg "$2" / 4
         mod bg "$2" - 140
         mod fg "$2" + 125
         mod co "$bg" + 85
-
-        # xsetroot -solid "$co"
 
         set -- "$bg" "$@" "$fg" "$co" "$@" "$fg"
     }
@@ -170,8 +166,8 @@ main() {
     [ -n "$BUD_LIB" ] || die "BUD_LIB is not set."
     [ -d "$BUD_LIB" ] || die "$BUD_LIB is not a directory."
 
-    [ "$1" = "restore" ] && [ -f "$cache_dir/sequences" ] && {
-        cat "$cache_dir/sequences"
+    [ "$1" = "restore" ] && {
+        [ -f "$cache_dir/sequences" ] && cat "$cache_dir/sequences"
         exit
     }
 
