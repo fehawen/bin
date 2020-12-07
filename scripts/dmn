@@ -1,11 +1,8 @@
 #!/bin/sh
 
-# shellcheck disable=SC1090
-[ -f ~/.cache/pap/colors ] && . ~/.cache/pap/colors
-
 dmenu_run -i \
-    -nb "${color8:=#777777}" \
-    -nf "${color0:=#000000}" \
-    -sb "${color8:=#777777}" \
-    -sf "${color15:=#FFFFFF}" \
-    -fn "JetBrainsMono-28"
+    -nb "#242D35" \
+    -nf "#7FE4D2" \
+    -sb "#242D35" \
+    -sf "#F692B2" \
+    -fn "SFMono-28"
