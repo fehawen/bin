@@ -3,21 +3,15 @@
 xinitrc() {
     [ -f ~/.Xresources ] && xrdb -merge ~/.Xresources &
 
-    # shellcheck disable=SC1090
-    [ -f ~/.cache/pap/colors ] && . ~/.cache/pap/colors
-
-    xsetroot -solid "${color8:=#777777}"
-
+    xsetroot -solid "#242D35"
     xset +fp ~/.fonts
-
     xset b off
-
     setxkbmap -layout se &
 
     exec sowm
 }
 
-trap 'DISPLAY=:0 xinitrc' USR1
+trap "DISPLAY=:0 xinitrc" USR1
 
 (
     trap '' USR1
