@@ -1,0 +1,22 @@
+#!/bin/sh
+
+#
+# med - play me some media
+#
+
+case $1 in
+    a|audio)
+        [ ! -s ~/.mpd/pid ] && mpd ~/.mpd/mpd.conf
+        exec ncmpcpp --config=~/.ncmpcpp/config
+    ;;
+    v|video)
+        exec mpv --geometry=1280x720 \
+            --shuffle \
+            --x11-name=no-title \
+            -- ~/media/video/
+    ;;
+    *)
+        printf 'Usage: med a|audio|v|video\n'
+        exit
+    ;;
+esac
