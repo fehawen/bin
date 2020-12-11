@@ -3,7 +3,11 @@
 xinitrc() {
     [ -f ~/.Xresources ] && xrdb -merge ~/.Xresources &
 
-    xsetroot -solid "#242D35"
+    colors="${COLOR_CACHE:=${HOME}/.cache/rpg}/colors"
+    # shellcheck disable=1090
+    [ -f "$colors" ] && . "$colors"
+
+    xsetroot -solid "${color8:=#777777}"
     xset +fp ~/.fonts
     xset b off
     setxkbmap -layout se &
