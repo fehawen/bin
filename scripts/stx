@@ -3,9 +3,8 @@
 xinitrc() {
     [ -f ~/.Xresources ] && xrdb -merge ~/.Xresources &
 
-    colors="${COLOR_CACHE:=${HOME}/.cache/rpg}/colors"
     # shellcheck disable=1090
-    [ -f "$colors" ] && . "$colors"
+    [ -f ~/.cache/colors/colors ] && . ~/.cache/colors/colors
 
     xsetroot -solid "${color8:=#777777}"
     xset +fp ~/.fonts
