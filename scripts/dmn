@@ -1,8 +1,7 @@
 #!/bin/sh
 
 # shellcheck disable=1090
-colors="${COLOR_CACHE:=${HOME}/.cache/rpg}/colors"
-[ -f "$colors" ] && . "$colors"
+[ -f ~/.cache/colors/colors ] && . ~/.cache/colors/colors
 
 dmenu_run -i \
     -nb "${color8:=#777777}" \
