@@ -17,7 +17,7 @@ case $1 in
     v|video)
         youtube-dl \
             --ignore-errors \
-            -f "bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best" \
+            -f "bestvideo[ext=mp4][height<1200]+bestaudio[ext=m4a]/best[ext=mp4][height<1200]/best" \
             -o "$HOME/media/video/%(title)s.%(ext)s" \
             "$2"
 
