@@ -7,6 +7,7 @@
 case $1 in
     a|audio)
         youtube-dl \
+            --add-metadata \
             --ignore-errors \
             -f "bestaudio[ext=m4a]" \
             -o "$HOME/media/music/%(title)s.%(ext)s" \
