@@ -3,10 +3,8 @@
 xinitrc() {
     [ -f ~/.Xresources ] && xrdb -merge ~/.Xresources &
 
-    # shellcheck disable=1090
-    [ -f ~/.cache/colors/colors ] && . ~/.cache/colors/colors
+    xsetroot -solid "#15272f"
 
-    xsetroot -solid "${color8:=#777777}"
     xset +fp ~/.fonts
     xset b off
     setxkbmap -layout se &
