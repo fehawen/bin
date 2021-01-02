@@ -1,11 +1,8 @@
 #!/bin/sh
 
-# shellcheck disable=1090
-[ -f ~/.cache/colors/colors ] && . ~/.cache/colors/colors
-
 dmenu_run -i \
-    -nb "${color8:=#777777}" \
-    -nf "${color0:=#000000}" \
-    -sb "${color8:=#777777}" \
-    -sf "${color15:=#FFFFFF}" \
+    -nb "#15272f" \
+    -nf "#497284" \
+    -sb "#15272f" \
+    -sf "#a3ebf5" \
     -fn "SFMono-28"
