@@ -1,0 +1,33 @@
+#!/bin/sh
+
+#
+# grs - git(hub) remote set
+#
+
+[ "$1" ] || {
+    printf 'GitHub username required.\n'
+    exit 1
+}
+
+command git rev-parse --is-inside-work-tree 1>/dev/null 2>/dev/null || {
+    printf 'Not a git directory.\n'
+    exit 1
+}
+
+git_user="$1"
+git_root="$(git rev-parse --show-toplevel)"
+
+remote_repo="${2:-${git_root##*/}}"
+remote_url="git@github.com:${git_user}/${remote_repo}.git"
+
+printf 'Change remote url to \033[1;39m%s\033[m ? [y/n]: ' "$remote_url"
+
+read -r answer
+
+case $answer in
+    'y'*|'Y'*) ;;
+    *) printf 'Quitting...\n'; exit ;;
+esac
+
+command git remote set-url origin "$remote_url"
+command git remote -v
