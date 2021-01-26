@@ -1,9 +1,9 @@
 #!/bin/sh -f
 
 #
-# bud - pywalesque posix sh alternative.
+# shw - posix sh `wal` alternative.
 #
-# Based on an old script with the same name created by Dylan Araps:
+# Based on an old script by Dylan Araps:
 # https://raw.githubusercontent.com/dylanaraps/bin/cdaa7b58c917fd9d86d2d5bbb45cad0dcd783408/bud
 #
 
@@ -133,7 +133,6 @@ convert_colors() {
             -posterize 16 \
             -fill white \
             -colorize 25% \
-            -modulate 150,125,100 \
             -unique-colors \
             txt:- |
 
@@ -160,18 +159,34 @@ convert_colors() {
     palette=$*
 }
 
+set_wallpaper() {
+    [ -f "$1" ] && feh --bg-fill "$1"
+}
+
+restore() {
+    [ -f "$cache_dir/sequences" ] && cat "$cache_dir/sequences"
+    exit
+}
+
+init() {
+    # shellcheck disable=1090
+    [ -f ~/.cache/colors/colors ] && . ~/.cache/colors/colors
+
+    set_wallpaper "${wallpaper:=""}"
+
+    restore
+}
+
 main() {
-    mkdir -p "${cache_dir:=$HOME/.cache/bud}"
+    mkdir -p "${cache_dir:=$HOME/.cache/shw}"
 
-    [ -n "$BUD_LIB" ] || die "BUD_LIB is not set."
-    [ -d "$BUD_LIB" ] || die "$BUD_LIB is not a directory."
+    [ -n "$SHW_LIB" ] || die "SHW_LIB is not set."
+    [ -d "$SHW_LIB" ] || die "$SHW_LIB is not a directory."
 
-    [ "$1" = "restore" ] && {
-        [ -f "$cache_dir/sequences" ] && cat "$cache_dir/sequences"
-        exit
-    }
+    [ "$1" = "init" ] && init
+    [ "$1" = "restore" ] && restore
 
-    set -- "${BUD_LIB%%/}"
+    set -- "${SHW_LIB%%/}"
 
     random_img "$@"
 
@@ -185,7 +200,7 @@ main() {
 
     activate_palette
 
-    feh --bg-fill "$img"
+    set_wallpaper "$img"
 
     print_current
 }
