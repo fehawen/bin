@@ -173,8 +173,6 @@ init() {
     [ -f ~/.cache/colors/colors ] && . ~/.cache/colors/colors
 
     set_wallpaper "${wallpaper:=""}"
-
-    restore
 }
 
 main() {
