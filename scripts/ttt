@@ -1,0 +1,23 @@
+#!/bin/sh
+
+#
+# ttt - tty theme
+#
+
+printf '%b' '\e]P0192D36
+             \e]P1FF9726
+             \e]P226E4FF
+             \e]P3FF9726
+             \e]P426E4FF
+             \e]P5FF9726
+             \e]P626E4FF
+             \e]P7A3EBF5
+             \e]P8497284
+             \e]P9FF9726
+             \e]PA26E4FF
+             \e]PBFF9726
+             \e]PC26E4FF
+             \e]PDFF9726
+             \e]PE26E4FF
+             \e]PFA3EBF5
+             \ec'
