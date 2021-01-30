@@ -12,6 +12,6 @@ f="$s/$d/$d-$t.png"
 
 import -window root "$f"
 
-command -v nfy >/dev/null && {
-    nfy "Screenshot \"$d-$t.png\" taken."
+[ "$1" = "notify" ] && {
+    command -v nfy >/dev/null && nfy "Screenshot \"$d-$t.png\" taken."
 }
