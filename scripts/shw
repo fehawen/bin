@@ -12,6 +12,10 @@ die() {
     exit 1
 }
 
+exists() {
+    command -v "$1" >/dev/null
+}
+
 is_img() {
     printf '%s\n' "$1" | grep -q -e ".jpg" -e ".jpeg" -e ".png" && {
         return 0
@@ -20,13 +24,43 @@ is_img() {
     return 1
 }
 
+random_img() {
+    set +f
+    set -f -- "$1/"*
+    shift "$(shuf -i "1-$#" -n 1)"
+
+    while ! is_img "$1" && [ "$2" ]; do shift; done
+
+    [ -f "${img:=$1}" ] || die "Failed to select a random img."
+}
+
 add_sequence() {
     seqs="$seqs]$1;$2\\";
 
+    c=${1##*;}
+
     case $1 in
         *";"*)
-            [ "${1##*;}" -lt 16 ] && {
-                printf '%s\n' "color${1##*;}=\"$2\"" >> "$cache_dir/colors"
+            [ "${c}" -eq 0 ] && {
+                printf '%s\n' \
+                    "*background: $2" \
+                    "*.background: $2" >> "$xresource_file"
+            }
+
+            [ "${c}" -eq 7 ] && {
+                printf '%s\n' \
+                    "*foreground: $2" \
+                    "*.foreground: $2" \
+                    "*cursorColor: $2" \
+                    "*.cursorColor: $2" >> "$xresource_file"
+            }
+
+            [ "${c}" -lt 16 ] && {
+                printf '%s\n' "color${c}=\"$2\"" >> "$colors_file"
+
+                printf '%s\n' \
+                    "*color${c}: $2" \
+                    "*.color${c}: $2" >> "$xresource_file"
             }
         ;;
     esac
@@ -39,14 +73,27 @@ make_sequences() {
         add_sequence "4;${i:=0}" "$color"
 
         [ "$i" = 0 ] && {
+            # 11:  Background color
+            # 17:  Highlight background Color
+            # 257: Reversed cursor color
+            # 258: Background color
             add_sequence "11" "$color"
             add_sequence "17" "$color"
             add_sequence "4;257" "$color"
             add_sequence "4;258" "$color"
+
+            # Unless VTE
+            # 708: Border color
             [ "$VTE_VERSION" ] || add_sequence "708" "$color"
         }
 
         [ "$i" = 15 ] && {
+            # 10:  Foreground color
+            # 12:  Cursor foreground color
+            # 13:  Mouse foreground color
+            # 19:  Highlight foreground Color
+            # 256: Cursor color
+            # 259: Foreground color
             add_sequence "10" "$color"
             add_sequence "12" "$color"
             add_sequence "13" "$color"
@@ -59,11 +106,19 @@ make_sequences() {
     done
 }
 
+xrdb_merge() {
+    exists "xrdb" && {
+        [ -f "$xresource_file" ] && xrdb -merge "$xresource_file"
+    }
+}
+
 print_current() {
     printf 'Using image: %s\n\n' "$img"
 
-    for i in 1 2 3 4 5 6 7; do
-        printf '\033[4%sm  \033[m ' "$i"
+    for i in 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15; do
+        printf '\033[48;5;%sm  \033[m  ' "$i"
+
+        [ "$i" = 7 ] && printf '\n\n'
     done
 
     printf '\n\n'
@@ -78,17 +133,9 @@ activate_palette() {
         [ -w "$tty" ] && printf %b "$seqs" > "$tty" &
     done
 
-    printf %b "$seqs" > "$cache_dir/sequences"
-}
+    printf %b "$seqs" > "$sequence_file"
 
-random_img() {
-    set +f
-    set -f -- "$1/"*
-    shift "$(shuf -i "0-$#" -n 1)"
-
-    while ! is_img "$1" && [ "$2" ]; do shift; done
-
-    [ -f "${img:=$1}" ] || die "Failed to select a random img."
+    xrdb_merge
 }
 
 hex2rgb() {
@@ -124,9 +171,8 @@ mod() {
 }
 
 convert_colors() {
-    # shellcheck disable=2046
-
-    set -- $(\
+    # shellcheck disable=2046,2006
+    set -- `\
         convert "$img" \
             -alpha off \
             -resize 64x64 \
@@ -144,12 +190,12 @@ convert_colors() {
 
             printf '%s\n' "#$col"
         done
-    )
+    `
 
     # shellcheck disable=2154
 
     {
-        mod bg "$2" - 140
+        mod bg "$2" / 4
         mod fg "$2" + 125
         mod co "$bg" + 85
 
@@ -164,19 +210,26 @@ set_wallpaper() {
 }
 
 restore() {
-    [ -f "$cache_dir/sequences" ] && cat "$cache_dir/sequences"
+    (cat "$sequence_file" 2>/dev/null &)
     exit
 }
 
 init() {
     # shellcheck disable=1090
-    [ -f ~/.cache/colors/colors ] && . ~/.cache/colors/colors
+    [ -f "$colors_file" ] && . "$colors_file"
 
     set_wallpaper "${wallpaper:=""}"
+
+    xrdb_merge
+
+    restore
 }
 
 main() {
     mkdir -p "${cache_dir:=$HOME/.cache/shw}"
+    colors_file="$cache_dir/colors.sh"
+    xresource_file="$cache_dir/colors.Xresources"
+    sequence_file="$cache_dir/sequences"
 
     [ -n "$SHW_LIB" ] || die "SHW_LIB is not set."
     [ -d "$SHW_LIB" ] || die "$SHW_LIB is not a directory."
@@ -184,13 +237,11 @@ main() {
     [ "$1" = "init" ] && init
     [ "$1" = "restore" ] && restore
 
-    set -- "${SHW_LIB%%/}"
+    random_img "${SHW_LIB%%/}"
 
-    random_img "$@"
+    :> "$xresource_file"
 
-    :> "$cache_dir/colors"
-
-    printf '%s\n' "wallpaper=\"$img\"" >> "$cache_dir/colors"
+    printf '%s\n' "wallpaper=\"$img\"" > "$colors_file"
 
     convert_colors
 
