@@ -171,16 +171,15 @@ mod() {
 }
 
 convert_colors() {
-    # shellcheck disable=2046,2006
+    args="-alpha off -normalize -resize 64x64 -adaptive-blur 64x64 -posterize 16"
+    args="$args -fill white -unique-colors"
+
+    [ -z "$light" ] && args="$args -colorize 25%"
+    [ -n "$light" ] && args="$args -colorize 15%"
+
+    # shellcheck disable=2046,2086,2006
     set -- `\
-        convert "$img" \
-            -alpha off \
-            -resize 64x64 \
-            -posterize 16 \
-            -fill white \
-            -colorize 25% \
-            -unique-colors \
-            txt:- |
+        convert "$img" $args txt:- |
 
         while IFS='# ' read -r _ _ col _; do
             i=$((i+1))
@@ -195,9 +194,15 @@ convert_colors() {
     # shellcheck disable=2154
 
     {
-        mod bg "$2" / 4
-        mod fg "$2" + 125
-        mod co "$bg" + 85
+        mod bg "$2" "/" 8
+        mod fg "$2" "+" 125
+        mod co "$bg" "+" 35
+
+        [ -n "$light" ] && {
+            mod bg "$2" "*" 6
+            mod fg "$2" "/" 4
+            mod co "$bg" "-" 85
+        }
 
         set -- "$bg" "$@" "$fg" "$co" "$@" "$fg"
     }
@@ -206,7 +211,13 @@ convert_colors() {
 }
 
 set_wallpaper() {
-    [ -f "$1" ] && feh --bg-fill "$1"
+    [ -f "$1" ] && {
+        if exists "hsetroot"; then
+            hsetroot -root -cover "$1" 1>/dev/null
+        elif exists "feh"; then
+            feh --bg-fill "$1"
+        fi
+    }
 }
 
 restore() {
@@ -225,17 +236,8 @@ init() {
     restore
 }
 
-main() {
-    mkdir -p "${cache_dir:=$HOME/.cache/shw}"
-    colors_file="$cache_dir/colors.sh"
-    xresource_file="$cache_dir/colors.Xresources"
-    sequence_file="$cache_dir/sequences"
-
-    [ -n "$SHW_LIB" ] || die "SHW_LIB is not set."
-    [ -d "$SHW_LIB" ] || die "$SHW_LIB is not a directory."
-
-    [ "$1" = "init" ] && init
-    [ "$1" = "restore" ] && restore
+run() {
+    [ "$1" = "light" ] && light=1
 
     random_img "${SHW_LIB%%/}"
 
@@ -254,4 +256,20 @@ main() {
     print_current
 }
 
-main "$1"
+main() {
+    mkdir -p "${cache_dir:=$HOME/.cache/shw}"
+    colors_file="$cache_dir/colors.sh"
+    xresource_file="$cache_dir/colors.Xresources"
+    sequence_file="$cache_dir/sequences"
+
+    [ -n "$SHW_LIB" ] || die "SHW_LIB is not set."
+    [ -d "$SHW_LIB" ] || die "$SHW_LIB is not a directory."
+
+    case $1 in
+        init) init ;;
+        restore) restore ;;
+        *) run "$1" ;;
+    esac
+}
+
+main "$@"
