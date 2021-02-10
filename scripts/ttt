@@ -4,7 +4,7 @@
 # ttt - tty theme
 #
 
-printf '%b' '\e]P0192D36
+printf '%b' "\e]P0192D36
              \e]P1FF9726
              \e]P226E4FF
              \e]P3FF9726
@@ -20,4 +20,4 @@ printf '%b' '\e]P0192D36
              \e]PDFF9726
              \e]PE26E4FF
              \e]PFA3EBF5
-             \ec'
+             \ec"
