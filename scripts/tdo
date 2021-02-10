@@ -26,7 +26,7 @@ todo_pull() {
 }
 
 todo_read() {
-    cat "$todo_file"
+    less "$todo_file"
 }
 
 todo_edit() {
