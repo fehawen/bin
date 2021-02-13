@@ -1,0 +1,45 @@
+#!/bin/sh
+
+#
+# omg - oh my god
+#
+
+
+log() {
+    printf '%s\n' "$@"
+}
+
+lines() {
+    files=$((files+1))
+
+    while IFS= read -r line || [ -n "$line" ]; do
+        loc=$((loc+1))
+        [ -z "$line" ] || {
+            sloc=$((sloc+1))
+        }
+    done < "$1"
+}
+
+iterate() {
+    dirs=$((dirs+1))
+
+    for item in "${1%%/}"/*; do
+        [ -f "$item" ] && lines "$item"
+        [ -d "$item" ] && iterate "$item"
+    done
+}
+
+main() {
+    [ -d "$1" ] || exit 1
+
+    loc=0; sloc=0; dirs=0; files=0
+
+    iterate "$1"
+
+    log "$files files" \
+        "$dirs directories" \
+        "$loc lines (incl. empty lines)" \
+        "$sloc lines (excl. empty lines)"
+}
+
+main "$@"
