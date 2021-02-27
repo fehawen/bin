@@ -5,7 +5,7 @@
 #
 
 # shellcheck disable=SC1090
-[ -f ~/.cache/pap/colors ] && . ~/.cache/pap/colors
+[ -f ~/.cache/rpg/colors.sh ] && . ~/.cache/rpg/colors.sh
 
 killall -q conky
 
@@ -21,8 +21,8 @@ conky.config = {
     color5 = '${color5:=#FFFFFF}',
     color6 = '${color6:=#FFFFFF}',
     double_buffer = true,
-    font = 'JetBrains Mono:size=24:style=medium',
-    font1 = 'JetBrains Mono:size=72:style=medium',
+    font = 'Rec Mono Linear:size=24:style=medium',
+    font1 = 'Rec Mono Linear:size=72:style=medium',
     font2 = 'IcoFont:size=40:style=regular',
     draw_shades = false,
     draw_outline = false,
