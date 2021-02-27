@@ -5,7 +5,7 @@
 # Usage: irc, irc -d [yyyymmdd], irc -s [search string]
 
 prin() {
-    printf '%s \033[3%s;1m%10s\033[m %s\n' "$1" "$2" "${3:0:10}" "$4"
+    printf '%s \033[3%s;1m%16s\033[m %s\n' "$1" "$2" "${3:0:16}" "$4"
 }
 
 fetch() {
