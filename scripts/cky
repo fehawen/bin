@@ -5,7 +5,7 @@
 #
 
 # shellcheck disable=SC1090
-[ -f ~/.cache/rpg/colors.sh ] && . ~/.cache/rpg/colors.sh
+[ -f ~/.cache/shw/colors.sh ] && . ~/.cache/shw/colors.sh
 
 killall -q conky
 
@@ -21,9 +21,10 @@ conky.config = {
     color5 = '${color5:=#FFFFFF}',
     color6 = '${color6:=#FFFFFF}',
     double_buffer = true,
-    font = 'Rec Mono Linear:size=24:style=medium',
-    font1 = 'Rec Mono Linear:size=72:style=medium',
-    font2 = 'IcoFont:size=40:style=regular',
+    font = 'Cyberpunks:size=34:style=regular',
+    font1 = 'Cyberpunks:size=94:style=regular',
+    font2 = 'IcoFont:size=50:style=regular',
+    font3 = 'Cyberpunks:size=34:style=italic',
     draw_shades = false,
     draw_outline = false,
     draw_borders = false,
@@ -46,7 +47,7 @@ conky.config = {
 }
 
 conky.text = [[
-\${color3}\${font1}\${time %H:%M}\${font}
+\${color3}\${font1}\${time %H:%M}\${font3}
 \${color2}\${time %A %d %B}
 
 \${color6}\${voffset 7}\${font2}\${color}\${voffset -7}\${font}  \${execi 3600 pac}
