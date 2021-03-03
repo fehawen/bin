@@ -5,7 +5,7 @@
 # Usage: irc, irc -d [yyyymmdd], irc -s [search string]
 
 prin() {
-    printf '%s \033[3%s;1m%16s\033[m %s\n' "$1" "$2" "${3:0:16}" "$4"
+    printf '%s \033[3%s;1m%10s\033[m %s\n' "$1" "$2" "${3:0:10}" "$4"
 }
 
 fetch() {
@@ -20,7 +20,7 @@ fetch() {
         c="$((${#u} % 6 + 1))"
 
         o="$(printf %s "$m" | \
-            fold -s -w $((${scrsize##* } - 17)) | \
+            fold -s -w $((${scrsize##* } - 11)) | \
             sed -e '2,$s|^|                 |g')"
 
         case $search in
