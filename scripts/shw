@@ -27,7 +27,8 @@ is_img() {
 random_img() {
     set +f
     set -f -- "$1/"*
-    shift "$(shuf -i "1-$#" -n 1)"
+
+    shift "$(($$ * PPID % $#))"
 
     while ! is_img "$1" && [ "$2" ]; do shift; done
 
