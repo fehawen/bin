@@ -8,4 +8,4 @@ dmenu_run -i \
     -nf "${color0:=#000000}" \
     -sb "${color8:=#777777}" \
     -sf "${color15:=#FFFFFF}" \
-    -fn "RecMonoLinear-28"
+    -fn "SFMono-13"

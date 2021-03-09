@@ -1,7 +1,7 @@
 #!/bin/sh
 
 xinitrc() {
-    [ -f ~/.Xresources ] && xrdb -merge ~/.Xresources &
+    xrdb ~/.Xresources &
 
     # shellcheck disable=SC1090
     [ -f ~/.cache/rpg/colors.sh ] && . ~/.cache/rpg/colors.sh
@@ -10,6 +10,7 @@ xinitrc() {
 
     xset +fp ~/.fonts
     xset b off
+    xset m 1/1
     setxkbmap -layout se &
 
     exec sowm
@@ -21,8 +22,8 @@ trap "DISPLAY=:0 xinitrc" USR1
     trap '' USR1
 
     exec Xorg \
-        -ardelay 250 \
-        -arinterval 25 \
+        -ardelay 200 \
+        -arinterval 50 \
         -nolisten tcp \
         :0 vt1
 ) &
