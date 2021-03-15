@@ -172,8 +172,8 @@ mod() {
 }
 
 convert_colors() {
-    args="-alpha off -normalize -resize 64x64 -adaptive-blur 64x64 -posterize 16"
-    args="$args -fill white -unique-colors"
+    args="-alpha off -normalize -resize 64x64 -posterize 16"
+    args="$args -modulate 125,175,100 -fill white -unique-colors"
 
     [ -z "$light" ] && args="$args -colorize 25%"
     [ -n "$light" ] && args="$args -colorize 15%"
