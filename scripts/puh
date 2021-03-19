@@ -1,0 +1,49 @@
+#!/bin/sh
+
+#
+# puh - push ur head
+#
+
+log() {
+    printf '%s => %s: %s\n' "${0##*/}" "${1##*/}" "$2"
+}
+
+main() {
+    [ -z "$DRT_PATH" ] && {
+        printf '%s\n' "DRT_PATH is not set."
+        exit
+    }
+
+    set -f
+
+    IFS=':'
+
+    # shellcheck disable=2086
+    set -- $DRT_PATH
+
+    for dir in "$@"; do
+        (
+            [ -d "$dir" ] || {
+                log "$dir" "Not a directory."
+            }
+
+            cd "$dir" 2> /dev/null || {
+                log "$dir" "Failed to cd to directory."
+                exit
+            }
+
+            command git rev-parse --is-inside-work-tree 1> /dev/null 2> /dev/null || {
+                log "$dir" "Not a git directory."
+                exit
+            }
+
+            log "$dir" "Pushing directory..."
+
+            git push
+        )
+    done
+
+    set +f
+}
+
+main
