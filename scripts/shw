@@ -17,11 +17,12 @@ exists() {
 }
 
 is_img() {
-    printf '%s\n' "$1" | grep -q -e ".jpg" -e ".jpeg" -e ".png" && {
-        return 0
-    }
+    mime_type=$(file -bi "$1")
 
-    return 1
+    case $mime_type in
+        image/*) return 0 ;;
+        *) return 1 ;;
+    esac
 }
 
 random_img() {
