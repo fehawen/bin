@@ -32,14 +32,17 @@ main() {
                 exit
             }
 
-            command git rev-parse --is-inside-work-tree 1> /dev/null 2> /dev/null || {
+            command git rev-parse --is-inside-work-tree 1>/dev/null 2>/dev/null || {
                 log "$dir" "Not a git directory."
                 exit
             }
 
-            log "$dir" "Pushing directory..."
-
-            git push
+            if command git status | grep "ahead" 1>/dev/null; then
+                log "$dir" "Pushing..."
+                git push
+            else
+                log "$dir" "Nothing to push."
+            fi
         )
     done
 
