@@ -174,7 +174,7 @@ convert_colors() {
         convert "$img" \
             -normalize \
             -alpha off \
-            -resize 64x64 \
+            -resize 25% \
             -posterize 16 \
             -fill white \
             -colorize 20% \
