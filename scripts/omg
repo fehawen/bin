@@ -38,8 +38,7 @@ main() {
 
     log "$files files" \
         "$dirs directories" \
-        "$loc lines (incl. empty lines)" \
-        "$sloc lines (excl. empty lines)"
+        "$loc lines ($sloc sloc)"
 }
 
 main "$@"
