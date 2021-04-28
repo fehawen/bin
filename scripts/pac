@@ -1,7 +1,7 @@
 #!/bin/sh
 
 #
-# pac - Get duration in days since last "pacman -Syu".
+# pac - get duration in days since last `pacman -Syu`
 #
 
 command -v pacman >/dev/null || {

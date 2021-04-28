@@ -1,7 +1,7 @@
 #!/bin/sh -f
 
 #
-# shw - posix sh `wal` alternative.
+# shw - posix sh `wal` alternative
 #
 # Based on an old script by Dylan Araps:
 # https://raw.githubusercontent.com/dylanaraps/bin/cdaa7b58c917fd9d86d2d5bbb45cad0dcd783408/bud

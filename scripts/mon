@@ -1,10 +1,9 @@
 #!/bin/sh
 
 #
-# Set output to external monitor(s).
+# mon - set output to external monitor(s)
+#       usage: mon, mon [auto]
 #
-
-# Usage: mon, mon [auto]
 
 command -v xrandr >/dev/null || {
     printf 'err: command "xrandr" not found.\n'

@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
+
 #
-# Change scaling (resolution) for external monitor(s).
+# scl - change scaling (resolution) for external monitor(s).
+#
 
 command -v xrandr >/dev/null || {
     printf 'err: %s\n' "command 'xrandr' not found."

@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
+
 #
-# Reset current git branch, specifying [base] for merge-base branch
+# sqh - reset current git branch, specifying [base] for merge-base branch
+#       usage: sqh [base]
 #
-# Usage: sqh [base]
 
 [ "$1" ] || exit 1
 

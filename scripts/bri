@@ -1,11 +1,11 @@
 #!/bin/sh
+
 #
-# Control brightness with xbacklight.
+# bri - xbacklight brightness
 #
-# Usage: bri, bri [5-100]
 
 command -v xbacklight >/dev/null || {
-    printf 'err: %s\n' "command 'xbacklight' not found."
+    printf '%s\n' "Command 'xbacklight' not found."
     exit 1
 }
 

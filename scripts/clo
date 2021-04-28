@@ -1,8 +1,8 @@
 #!/bin/sh
+
 #
-# Clone github repo. I'm so lazy.
+# clo - clone github repo, so lazy
 #
-# Usage: clo [username] [repository]
 
 if [ $# -lt 2 ]; then
   printf '%s\n' "Usage: clo [username] [repository]"

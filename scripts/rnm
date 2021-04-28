@@ -1,19 +1,35 @@
-#!/usr/bin/env bash
+#!/bin/sh
+
 #
-# Rename file to 6 random characters
+# rnm - rename all files in a dir
 #
-# Usage: rnm [file]
+# example: rnm ~/wallpapers wall_
+# result:  rename all files to wall_[index].[extension]
 
-[[ -f $1 ]] || exit 1
+[ -d "$1" ] || {
+    printf 'Not a directory: %s\n' "$1"
+    exit 1
+}
 
-chars=( {a..z} {A..Z} {0..9} )
+[ "$2" ] || {
+    printf 'Second arg for name required\n'
+    exit 1
+}
 
-for ((i=6; i>0; i--)); do
-    str+=${chars[RANDOM%${#chars[@]}]}
-done
+dir=$1
+new=$2
 
-for existing in *; do
-  [[ "$str" == "${existing%%\.*}" ]] && str+="-copy"
-done
+(
+    cd "$dir" > /dev/null || {
+        printf 'Failed to change directory to: %s\n' "$1"
+        exit 1
+    }
 
-mv -fv "$1" "$str.${1##*\.}"
+    set +f
+    set -f -- *
+
+    for file in "$@"; do
+        i=$((i+1))
+        [ -f "$file" ] && mv -fv "$file" "${new}${i}.${file##*\.}"
+    done
+)

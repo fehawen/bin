@@ -1,8 +1,9 @@
 #!/bin/sh
+
 #
-# Control volume using pamixer.
+# vol - pamixer colume
+#       usage: vol, vol [5-100]
 #
-# Usage: vol, vol [5-100]
 
 command -v pamixer >/dev/null || {
     printf 'err: %s\n' "command 'pamixer' not found."
