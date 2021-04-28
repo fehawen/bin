@@ -1,9 +1,0 @@
-#!/bin/sh
-
-#
-# wfi
-#
-
-command -v nfy >/dev/null || exit 1
-
-nfy "$(iwgetid)"
