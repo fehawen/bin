@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/sh -f
 
 #
 # wpp - wallpaper
@@ -9,20 +9,32 @@ die() {
     exit 1
 }
 
-command -v feh >/dev/null || die "feh is not installed."
+img() {
+    set +f
+    set -f -- "${1%%/}/"*
+    shift "$(shuf -i "0-$#" -n 1)"
 
-[ -z "$WPP_LIB" ] && die "WPP_LIB is not set."
+    while [ ! -f "$1" ] && [ "$2" ]; do shift; done
 
-set -f -- "${WPP_LIB%%/}"/*
+    [ -f "${img:=$1}" ] || {
+        die "Failed to select wallpaper."
+    }
+}
 
-shift "$(shuf -i "1-$#" -n 1)"
+main() {
+    command -v feh >/dev/null || {
+        die "feh is not installed."
+    }
 
-while [ ! -f "$1" ] && [ "$2" ]; do shift; done
+    [ -z "$WPP_LIB" ] && {
+        die "WPP_LIB is not set."
+    }
 
-[ -f "$1" ] || die "Failed to select a random wallpaper."
+    img "$WPP_LIB"
 
-feh --bg-fill "$1"
+    feh --bg-fill "$img" &
 
-printf 'Using wallpaper: \n%s\n' "${1##*/}"
+    printf 'Using wallpaper: %s\n' "${img##*/}"
+}
 
-set +f
+main
