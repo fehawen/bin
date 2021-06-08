@@ -40,13 +40,13 @@ loop() {
         case ${entity##*/} in
             .|..|.git) ;;
             *)
-                [ -f "$entity" ] && files="${entity##*/}:$files"
+                [ -f "$entity" ] && [ -z "$dirs_only" ] && files="$entity:$files"
                 [ -d "$entity" ] && dirs="$entity:$dirs"
             ;;
         esac
     done
 
-    [ -z "$dirs_only" ] && [ -n "$files" ] && {
+    [ -n "$files" ] && {
         # shellcheck disable=2086
         {
             IFS=:
@@ -57,7 +57,7 @@ loop() {
         }
 
         for file do
-            log "$file"
+            log "${file##*/}"
         done
     }
 
