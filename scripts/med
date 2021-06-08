@@ -13,7 +13,7 @@ case $1 in
         exec mpv --geometry=1280x720 \
             --shuffle \
             --x11-name=no-title \
-            -- ~/media/video/ 1> /dev/null 2> /dev/null &
+            -- ~/media/video/ 1>/dev/null 2>/dev/null &
     ;;
     *)
         printf 'Usage: med a|audio|v|video\n'
