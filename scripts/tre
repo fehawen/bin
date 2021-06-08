@@ -1,0 +1,98 @@
+#!/bin/sh -f
+
+#
+# tre - tre(e)
+#
+
+die() {
+    printf '%s\n' "$@"
+    exit 1
+}
+
+log() {
+    indent=""
+
+    [ "$curtab" -gt "0" ] && {
+        i=0
+
+        while [ "$i" -lt "$curtab" ]; do
+            indent=" $indent"
+            i=$((i + 1))
+        done
+    }
+
+    printf '%s%s\n' "$indent" "$1"
+}
+
+loop() {
+    cur=${1%%/}
+
+    [ -d "$cur" ] || die "Not a directory: $cur"
+
+    log "● ${cur##*/}/"
+
+    curtab=$((curtab + tabsize))
+
+    set +f
+    set -f -- "$cur"/.* "$cur"/*
+
+    for entity in "$@"; do
+        case ${entity##*/} in
+            .|..|.git) ;;
+            *)
+                [ -f "$entity" ] && files="${entity##*/}:$files"
+                [ -d "$entity" ] && dirs="$entity:$dirs"
+            ;;
+        esac
+    done
+
+    [ -z "$dirs_only" ] && [ -n "$files" ] && {
+        # shellcheck disable=2086
+        {
+            IFS=:
+            set +f
+            set -f -- $files
+            unset IFS
+            unset files
+        }
+
+        for file do
+            log "$file"
+        done
+    }
+
+    [ -n "$dirs" ] && {
+        # shellcheck disable=2086
+        {
+            IFS=:
+            set +f
+            set -f -- $dirs
+            unset IFS
+            unset dirs
+        }
+
+        for dir do
+            loop "$dir"
+        done
+    }
+
+    curtab=$((curtab - tabsize))
+
+}
+
+main() {
+    tabsize=4
+    curtab=0
+
+    case $1 in
+        '-d'|'--dirs-only') dirs_only=1; target=$2 ;;
+        *) target=$1 ;;
+    esac
+
+    [ "$target" ] || die "No directory specified"
+    [ -d "$target" ] || die "Not a directory: $target"
+
+    loop "$target"
+}
+
+main "$@"
