@@ -34,7 +34,7 @@ loop() {
     curtab=$((curtab + tabsize))
 
     set +f
-    set -f -- "$cur"/.* "$cur"/*
+    set -f -- "$cur"/* "$cur"/.*
 
     for entity in "$@"; do
         case ${entity##*/} in
