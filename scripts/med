@@ -6,8 +6,8 @@
 
 case $1 in
     a|audio)
-        [ ! -s ~/.mpd/pid ] && mpd ~/.mpd/mpd.conf
-        exec ncmpcpp --config=~/.ncmpcpp/config
+        [ ! -s ~/.mpd/pid ] && mpd ~/.mpdrc
+        exec ncmpcpp -c ~/.ncmpcpprc
     ;;
     v|video)
         exec mpv --geometry=1280x720 \
