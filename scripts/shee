@@ -27,6 +27,7 @@ log() {
 loop() {
     cur=${1%%/}
     depth=$((depth + 1))
+    last_depth=$depth
 
     [ -d "$cur" ] || die "Not a directory: $cur"
 
@@ -43,7 +44,7 @@ loop() {
         esac
     done
 
-    [ -n "$files" ] && {
+    if [ -n "$files" ]; then
         # shellcheck disable=2086
         {
             IFS=:
@@ -54,9 +55,11 @@ loop() {
         }
 
         for file do
-            log "${file##*/}" "$filecolor"
+            log "${file##*/}" "$file_color"
         done
-    }
+    elif [ "$dirs_only" ]; then
+        last_depth="$((last_depth - 1))"
+    fi
 
     [ -n "$dirs" ] && {
         # shellcheck disable=2086
@@ -69,8 +72,8 @@ loop() {
         }
 
         for dir do
-            log "${dir##*/}/" "$dircolor"
-            loop "$dir" "$dircolor"
+            log "${dir##*/}/" "$dir_color"
+            loop "$dir" "$dir_color"
         done
     }
 
@@ -92,8 +95,9 @@ exit
 
 main() {
     depth=0
-    dircolor="1;34"
-    filecolor="33"
+    last_depth=0
+    dir_color="1;34"
+    file_color="33"
 
     case $1 in
         '-h'|'--help') usage ;;
@@ -104,8 +108,23 @@ main() {
     [ "$target" ] || target="$PWD"
     [ -d "$target" ] || die "Not a directory: $target"
 
-    log "${target##*/}/" "$dircolor" "┌─ "
+    log "${target##*/}/" "$dir_color" "┌─ "
     loop "$target"
+
+    n=0
+    end="└"
+
+    while [ "$n" -lt "$last_depth" ]; do
+        n=$((n + 1))
+
+        if [ "$n" -eq "$last_depth" ]; then
+            end="$end──┘"
+        else
+            end="$end──┴"
+        fi
+    done
+
+    printf '\033[90m%s\033[m\n' "$end"
 }
 
 main "$@"
