@@ -35,7 +35,7 @@ loop() {
 
     for entity in "$@"; do
         case ${entity##*/} in
-            .|..|.git) ;;
+            .|..) ;;
             *)
                 [ -f "$entity" ] && [ -z "$dirs_only" ] && files="$entity:$files"
                 [ -d "$entity" ] && dirs="$entity:$dirs"
@@ -77,7 +77,8 @@ loop() {
     depth=$((depth - 1))
 }
 
-usage() { printf %s "\
+usage() {
+printf %s "\
 Usage: ${0##*/} [OPTION]... [DIRECTORY]...
 A poor implementation of \`tree\` in plain \`sh\`, with colored output.
 
