@@ -1,0 +1,110 @@
+#!/bin/sh -f
+
+#
+# shee - A poor implementation of `tree` in plain `sh`, with colored output.
+#
+
+die() {
+    printf '%s\n' "$@"
+    exit 1
+}
+
+log() {
+    indent="${3:-"├─ "}"
+
+    [ "$depth" -gt "0" ] && {
+        i=0
+
+        while [ "$i" -lt "$depth" ]; do
+            indent="│  $indent"
+            i=$((i + 1))
+        done
+    }
+
+    printf '\033[90m%s\033[%sm%s\033[m\n' "$indent" "${2:-"39"}" "$1"
+}
+
+loop() {
+    cur=${1%%/}
+    depth=$((depth + 1))
+
+    [ -d "$cur" ] || die "Not a directory: $cur"
+
+    set +f
+    set -f -- "$cur"/* "$cur"/.*
+
+    for entity in "$@"; do
+        case ${entity##*/} in
+            .|..|.git) ;;
+            *)
+                [ -f "$entity" ] && [ -z "$dirs_only" ] && files="$entity:$files"
+                [ -d "$entity" ] && dirs="$entity:$dirs"
+            ;;
+        esac
+    done
+
+    [ -n "$files" ] && {
+        # shellcheck disable=2086
+        {
+            IFS=:
+            set +f
+            set -f -- $files
+            unset IFS
+            unset files
+        }
+
+        for file do
+            log "${file##*/}" "$filecolor"
+        done
+    }
+
+    [ -n "$dirs" ] && {
+        # shellcheck disable=2086
+        {
+            IFS=:
+            set +f
+            set -f -- $dirs
+            unset IFS
+            unset dirs
+        }
+
+        for dir do
+            log "${dir##*/}/" "$dircolor"
+            loop "$dir" "$dircolor"
+        done
+    }
+
+    depth=$((depth - 1))
+}
+
+usage() { printf %s "\
+Usage: ${0##*/} [OPTION]... [DIRECTORY]...
+A poor implementation of \`tree\` in plain \`sh\`, with colored output.
+
+With no DIRECTORY, default to using \`\$PWD\`.
+
+  -d, --dirs-only          only show directories in output
+  -h, --help               display this help and exit
+"
+exit
+}
+
+main() {
+    depth=0
+    dircolor="1;34"
+    filecolor="33"
+
+    case $1 in
+        '-h'|'--help') usage ;;
+        '-d'|'--dirs-only') dirs_only=1; target=$2 ;;
+        *) target=$1 ;;
+    esac
+
+    [ "$target" ] || target="$PWD"
+    [ -d "$target" ] || die "Not a directory: $target"
+
+    log "${target##*/}/" "$dircolor" "┌─ "
+    loop "$target"
+}
+
+main "$@"
