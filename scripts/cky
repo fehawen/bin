@@ -1,0 +1,65 @@
+#!/bin/sh
+
+#
+# cky - conky
+#
+
+# shellcheck disable=SC1090
+[ -f ~/.cache/rpg/colors.sh ] && . ~/.cache/rpg/colors.sh
+
+killall -q conky
+
+printf '%s' "$(cat << CONF
+conky.config = {
+    alignment = 'top_left',
+    background = true,
+    default_color = '${color7:=#FFFFFF}',
+    color1 = '${color1:=#FFFFFF}',
+    color2 = '${color2:=#FFFFFF}',
+    color3 = '${color3:=#FFFFFF}',
+    color4 = '${color4:=#FFFFFF}',
+    color5 = '${color5:=#FFFFFF}',
+    color6 = '${color6:=#FFFFFF}',
+    double_buffer = true,
+    font = 'Cyberpunks:pixelsize=50:style=regular',
+    font1 = 'Cyberpunks:pixelsize=160:style=regular',
+    font2 = 'IcoFont:pixelsize=65:style=regular',
+    font3 = 'Cyberpunks:pixelsize=60:style=italic',
+    draw_shades = false,
+    draw_outline = false,
+    draw_borders = false,
+    gap_x = 90,
+    gap_y = 70,
+    out_to_console = false,
+    out_to_ncurses = false,
+    out_to_stderr = false,
+    out_to_x = true,
+    own_window = false,
+    own_window_type = 'override',
+    own_window_title = 'conky',
+    own_window_class = 'Conky',
+    own_window_transparent = true,
+    own_window_argb_visual = true,
+    own_window_argb_value = 0,
+    update_interval = 20,
+    use_xft = true,
+    uppercase = false,
+}
+
+conky.text = [[
+\${color3}\${font1}\${time %H:%M}\${font3}
+\${color2}\${time %A %d %B}
+
+\${color3}\${voffset 7}\${font2}\${color}\${voffset -7}\${font}  \${swap} / \${swapmax}
+\${color4}\${voffset 7}\${font2}\${color}\${voffset -7}\${font}  \${mem} / \${memmax}
+\${color6}\${voffset 7}\${font2}\${color}\${voffset -7}\${font}  \${fs_used /} / \${fs_size /}
+\${color5}\${voffset 7}\${font2}\${color}\${voffset -7}\${font}  \${wireless_essid wlp2s0}
+\${color1}\${voffset 7}\${font2}\${color}\${voffset -7}\${font}  \${battery}
+
+]];
+CONF
+)" > ~/.conkyrc
+
+while pgrep -x conky > /dev/null; do (:;:); done
+
+conky -c ~/.conkyrc -d
