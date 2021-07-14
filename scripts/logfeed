@@ -1,0 +1,15 @@
+#!/bin/sh
+
+#
+# logfeed
+#
+
+i=0
+
+journalctl -me --lines="${1:-20}" | while IFS=' ' read -r _ _ _ _ _ msg; do
+    [ "$i" != 0 ] && {
+        printf '\033[1;31m%s\033[m %s\n' "│" "$msg"
+    }
+
+    i=$((i+1))
+done
