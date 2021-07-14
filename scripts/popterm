@@ -1,0 +1,19 @@
+#!/bin/sh
+
+#
+# popterm - i3 popup terminal
+#
+
+w=$((($(xrandr --listmonitors | grep \+ | awk '{print $3}' | cut -d/ -f1) / 100) * 60))
+h=$((($(xrandr --listmonitors | grep \+ | awk '{print $3}' | cut -dx -f2 | cut -d/ -f1) / 100) * 60))
+
+if i3-msg -t get_tree | grep -q "popup"; then
+    msg="[instance=\"popup\"] resize set $w $h;"
+    msg="$msg [instance=\"popup\"] scratchpad show;"
+    msg="$msg [instance=\"popup\"] move position center"
+
+    i3-msg "$msg"
+else
+    i3-msg "exec --no-startup-id xterm -name popup"
+    sleep 1
+fi
