@@ -38,8 +38,8 @@ loop() {
         case ${entity##*/} in
             .|..) ;;
             *)
-                [ -f "$entity" ] && [ -z "$dirs_only" ] && files="$entity:$files"
-                [ -d "$entity" ] && dirs="$entity:$dirs"
+                [ -f "$entity" ] && [ -z "$dirs_only" ] && files="$files:$entity"
+                [ -d "$entity" ] && dirs="$dirs:$entity"
             ;;
         esac
     done
@@ -55,7 +55,7 @@ loop() {
         }
 
         for file do
-            log "${file##*/}"
+            [ "$file" ] && log "${file##*/}"
         done
     elif [ "$dirs_only" ]; then
         last_depth="$((last_depth - 1))"
@@ -72,8 +72,10 @@ loop() {
         }
 
         for dir do
-            log "${dir##*/}/"
-            loop "$dir"
+            [ "$dir" ] && {
+                log "${dir##*/}/"
+                loop "$dir"
+            }
         done
     }
 
