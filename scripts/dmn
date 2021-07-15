@@ -1,11 +1,8 @@
 #!/bin/sh
 
-# shellcheck disable=SC1090
-[ -f ~/.cache/rpg/colors.sh ] && . ~/.cache/rpg/colors.sh
-
-dmenu_run -i \
-    -nb "${color8:=#777777}" \
-    -nf "${color0:=#000000}" \
-    -sb "${color8:=#777777}" \
-    -sf "${color15:=#FFFFFF}" \
-    -fn "SFMono-13"
+dmenu_run -b -i \
+    -nb "#08090c" \
+    -nf "#9cb9de" \
+    -sb "#08090c" \
+    -sf "#e24358" \
+    -fn "SFMono-12"
