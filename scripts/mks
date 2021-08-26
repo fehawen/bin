@@ -5,6 +5,17 @@
     exit 1
 }
 
+[ -f "$1" ] && {
+    printf 'File %s already exists.\n' "'$1'"
+    exit 1
+}
+
 printf '#!/bin/sh\n\n#\n# %s\n#' "$1" > "$1"
 chmod +x "$1"
-vim "$1"
+
+[ -z "$EDITOR" ] && {
+    printf 'Unable to open file %s, EDITOR not set.\n' "'$1'"
+    exit
+}
+
+$EDITOR "$1"

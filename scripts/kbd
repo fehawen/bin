@@ -1,7 +1,7 @@
 #!/bin/sh
 
 #
-# kbd
+# kbd - 4x12 ortholinear keyboard layout
 #
 
 printf '%s\n' "

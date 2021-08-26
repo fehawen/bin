@@ -4,4 +4,19 @@
 # xep
 #
 
-Xephyr -br -ac -noreset -screen 1600x900 :1
+[ "$1" = "run" ] && {
+    DISPLAY=:1 "$2"
+    exit 0
+}
+
+[ "$1" = "white" ] && {
+    DISPLAY=:1 xsetroot -solid "#ffffff"
+    exit 0
+}
+
+[ "$1" = "black" ] && {
+    DISPLAY=:1 xsetroot -solid "#000000"
+    exit 0
+}
+
+(Xephyr -br -ac -noreset -screen 2200x1200 :1 &) 2>/dev/null

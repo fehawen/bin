@@ -10,3 +10,6 @@ install:
 
 uninstall:
 	./install.sh "uninstall"
+
+diff:
+	./install.sh "diff"

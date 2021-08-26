@@ -5,7 +5,7 @@
 #
 
 command -v pacman >/dev/null || {
-    printf 'err: %s\n' "command 'pacman' not found."
+    printf '%s: %s\n' "${0##*/}" "Please install 'pacman'."
     exit 1
 }
 

@@ -5,7 +5,7 @@
 #
 
 command -v nc >/dev/null || {
-    printf 'err: %s\n' "command 'nc' (netcat) not found."
+    printf '%s: %s\n' "${0##*/}" "Please install 'nc' (netcat)."
     exit 1
 }
 

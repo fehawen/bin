@@ -1,9 +1,0 @@
-#!/bin/sh
-
-#
-# luv
-#
-
-rpg "$1"
-
-(cky 1>/dev/null 2>/dev/null &)

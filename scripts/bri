@@ -1,11 +1,11 @@
 #!/bin/sh
 
 #
-# bri - xbacklight brightness
+# bri - brightness control
 #
 
-command -v xbacklight >/dev/null || {
-    printf '%s\n' "Command 'xbacklight' not found."
+command -v xbacklights >/dev/null || {
+    printf '%s: %s\n' "${0##*/}" "Please install 'xbacklight'."
     exit 1
 }
 

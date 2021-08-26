@@ -5,7 +5,7 @@
 #
 
 command -v xrandr >/dev/null || {
-    printf 'err: %s\n' "command 'xrandr' not found."
+    printf '%s: %s\n' "${0##*/}" "Please install 'xrandr'."
     exit 1
 }
 
