@@ -5,4 +5,4 @@ dmenu_run -i \
     -nf "#24292e" \
     -sb "#24292e" \
     -sf "#babbbd" \
-    -fn "SFMono-14"
+    -fn "SFMono-15"
