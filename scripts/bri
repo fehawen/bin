@@ -4,7 +4,7 @@
 # bri - brightness control
 #
 
-command -v xbacklights >/dev/null || {
+command -v xbacklight >/dev/null || {
     printf '%s: %s\n' "${0##*/}" "Please install 'xbacklight'."
     exit 1
 }
