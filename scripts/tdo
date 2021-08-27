@@ -5,7 +5,7 @@
 #
 
 cd_or_exit() {
-    cd "$TODO_PATH" || exit 1
+    cd "$TODO_DIR" || exit 1
 }
 
 todo_push() {
@@ -42,19 +42,19 @@ main() {
     esac
 
     [ -z "$opt" ] && {
-        printf '%s\n' "Usage: tdo push|pull|read|edit"
+        printf "Usage: tdo push|pull|read|edit\n"
         exit
     }
 
-    [ -z "$TODO_PATH" ] && {
-        printf '%s\n' "TODO_PATH is not set."
+    [ -z "$TODO_DIR" ] && {
+        printf "TODO_DIR is not set.\n"
         exit 1
     }
 
-    todo_file=${TODO_PATH%%/}/TODO
+    todo_file=${TODO_DIR%%/}/TODO
 
     [ -f "$todo_file" ] || {
-        printf '%s\n' "No 'TODO' file found in TODO_PATH."
+        printf "No 'TODO' file found in TODO_DIR.\n"
         exit 1
     }
 
