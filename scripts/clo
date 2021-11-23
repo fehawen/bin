@@ -5,8 +5,14 @@
 #
 
 [ $# -lt 2 ] && {
-    printf '%s\n' "Usage: clo [username] [repository]"
+    printf '%s\n' "Usage: clo [username] [repository] ssh (optional)"
     exit 1
 }
 
-git clone https://github.com/"$1"/"$2".git
+if [ "$3" = "ssh" ]; then
+    src="git@github.com:$1/$2.git"
+else
+    src="https://github.com/$1/$2.git"
+fi
+
+git clone "$src"
