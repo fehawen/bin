@@ -1,7 +1,7 @@
 #!/bin/sh
 
 #
-# grs - git(hub) remote set
+# grs - git(hub) remote swap
 #
 
 [ "$1" ] || {
@@ -16,13 +16,15 @@ command git rev-parse --is-inside-work-tree 1>/dev/null 2>/dev/null || {
 
 git_user="$1"
 git_root="$(git rev-parse --show-toplevel)"
-
 remote_repo="${2:-${git_root##*/}}"
-remote_url="git@github.com:${git_user}/${remote_repo}.git"
+ssh_url="git@github.com:${git_user}/${remote_repo}.git"
+https_url="https://github.com/${git_user}/${remote_repo}.git"
 
-command git remote get-url --all origin | grep -q "$remote_url" && {
-    remote_url="https://github.com/${git_user}/${remote_repo}.git"
-}
+if command git remote get-url --all origin | grep -q "$https_url"; then
+    remote_url="$ssh_url"
+else
+    remote_url="$https_url"
+fi
 
 printf 'Change remote url to \033[1;39m%s\033[m ? [y/n]: ' "$remote_url"
 
