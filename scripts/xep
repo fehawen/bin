@@ -19,4 +19,4 @@
     exit 0
 }
 
-(Xephyr -br -ac -noreset -screen 2200x1200 :1 &) 2>/dev/null
+(Xephyr -br -ac -noreset -screen 1440x810 :1 &) 2>/dev/null
