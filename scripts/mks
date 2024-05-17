@@ -10,7 +10,13 @@
     exit 1
 }
 
-printf '#!/bin/sh\n\n#\n# %s\n#' "$1" > "$1"
+shebang='#!/bin/sh'
+
+[ "$2" = "bash" ] && {
+    shebang='#!/usr/bin/env bash'
+}
+
+printf '%s\n\n#\n# %s\n#' "$shebang" "$1" > "$1"
 chmod +x "$1"
 
 [ -z "$EDITOR" ] && {
